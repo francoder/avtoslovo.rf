@@ -1,0 +1,11 @@
+			<div class="row">
+				<div class="col-sm-12">
+					<h3>Новый заказ</h3>
+				</div>
+				<div class="col-sm-12">
+					<?if( isset($errorMsg) ):?> 
+					<p class="btnStyle"><?=$errorMsg?></p>
+					<?endif;?> 
+					<a href="<?=$this->url->get("cart")?>">Вернуться в корзину</a>
+				</div>
+			</div>

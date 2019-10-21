@@ -1,0 +1,264 @@
+<?
+$this->assets
+->collection("footer")
+->addJs("assets/js/ordersList.js")
+->addCss("assets/css/font-awesome.min.css");
+?>
+<section class="panel panel-default">
+    <header class="panel-heading">
+        Заказы
+    </header>
+    <div class="row wrapper">
+        <div class="col-sm-5 m-b-xs" role="bulk">
+            <select class="input-sm form-control input-s-sm inline v-middle">
+                <option value="0">Массовое действие</option>
+                <option value="1">Удалить выбранные</option>
+            </select>
+            <button class="btn btn-sm btn-default" type="submit">Применить</button>
+        </div>
+        <div class="col-sm-4 m-b-xs"></div>
+        <div class="col-sm-3">
+            <form method="POST">
+                <div class="input-group">
+                    <input class="input-sm form-control" name="fio" placeholder="ФИО, телефон" type="text">
+                    <span class="input-group-btn">
+                    <button class="btn btn-sm btn-default" type="submit">Найти</button>
+                </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <form method="post" role="bulkForm">
+            <style media="screen">
+
+            </style>
+            <table class="table table-striped b-t b-light" id="ordersTable">
+                <thead>
+                    <tr>
+                        <th width="20">
+                            <label class="checkbox m-l m-t-none m-b-none i-checks">
+                                <input type="checkbox"><i></i>
+                            </label>
+                        </th>
+                        <th>ID</th>
+                        <th onclick="sortTable(0)" style="width: 50px">Заказано</th>
+                        <th>Клиент</th>
+                        <th style="width: 150px">Запчасть</th>
+                        <th style="width: 50px">Склад</th>
+                        <th>Цена</th>
+                        <th>Сумма</th>
+                        <th>Ожидается</th>
+                        <th onclick="sortTable(1)">Статус оплаты</th>
+                        <th onclick="sortTable(2)">Статус выполнения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?foreach( $ordersPage->items AS $order ):?>
+                        <?foreach( json_decode($order->items) AS $item ):?>
+                    <tr>
+                        <td>
+                            <label class="checkbox m-l m-t-none m-b-none i-checks">
+                                <input name="bulk[]" value="<?= $order->id ?>" type="checkbox"><i></i>
+                            </label>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <?= $order->id ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <?= $order->getCreatedDateTime()->format("d.m.Y H:i") ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <?= $order->user->getFullName() ?><br>
+                                <?= $order->user->email ?><br>
+                                <?= $order->user->phone ?>
+                            </a>
+                        </td>
+                        <td style="white-space: nowrap; max-width: 50px; overflow: hidden;">
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>" title="<?= $item->title ?>">
+                                <?= $item->brand ?>
+                                <?php
+                                $oem = substr($item->code, strpos($item->code, "@") + 1);
+                                echo '<b>' . stristr($oem, '::', true) . '</b>';
+                                ?><br>
+                                <?= $item->title ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <b><?= $item->stock ?><br></b>
+                                <?= $item->count ?> шт.
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <b><?= number_format($item->price, 0, ",", "&nbsp;") ?>&nbsp;р.</b>
+                                <br>
+                                <b class="text-muted"><?= number_format($item->originalPrice, 0, ".", "&nbsp;") ?>&nbsp;р.</b>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <?= number_format($item->price * $item->count, 0, ",", "&nbsp;") ?> р.
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <?= $item->delivery ?
+                                    $order->getCreatedDateTime()->modify("+ " . $item->delivery . " days")->format("d.m.Y") : 'В наличии' ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <span class="status-badge status-<?= $order->status ?>"><?= $order->getStatus() ?></span>
+                            </a>
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                            <form method="post">
+                                        <select name="status" id="status" style="width: 70%">
+                                            <?foreach( $order->getStatuses() AS $statusId => $statusName ):?>
+                                                <option value="<?=$statusId?>" <?=($statusId==$order->status?'selected="selected"':"")?>><?=$statusName?></option>
+                                            <?endforeach;?>
+                                        </select>
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save 2x"></i></button>
+                                    <input type="hidden" name="orderId" value="<?= $order->id ?>">
+
+                                <input type="hidden" name="action" value="update">
+                            </form>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?= $this->url->get(array("for" => "order", "id" => $order->id)) ?>">
+                                <span class="status-badge status-<?= $item->status ?>"><?= $order->getItemStatuses()[$item->status] ?></span>
+                            </a>
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                            <form method="post">
+                                    <select name="orders[<?=$item->code?>][status]" style="width: 70%">
+                                        <?foreach( $order->getItemStatuses() AS $key => $value ):?>
+                                            <option value="<?=$key?>" <?=($key==$item->status?"selected":"")?>><?=$value?></option>
+                                        <?endforeach;?>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save 2x"></i></button>
+                                    <input type="hidden" name="orderId" value="<?= $order->id ?>">
+                                <input type="hidden" name="action" value="items">
+                            </form>
+                        </td>
+                    </tr>
+                        <?endforeach;?>
+                    <?endforeach;?>
+                </tbody>
+            </table>
+            <input type="hidden" name="bulkAction" value="0">
+        </form>
+    </div>
+    <style media="screen">
+        .status-1{
+            padding: 5px;
+            color: #fff;
+            background: red;
+        }
+        .status-2{
+            padding: 5px;
+            color: #fff;
+            background: #eeee24;
+        }
+        .status-2{
+            padding: 5px;
+            color: #fff;
+            background: #3024ee;
+        }
+        .status-7{
+            padding: 5px;
+            color: #fff;
+            background: #8eee24;
+        }
+        .status-8{
+
+        }
+        .status-9{
+
+        }
+        .status-10{
+
+        }
+    </style>
+    <footer class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 hidden-xs" role="bulk">
+                <select class="input-sm form-control input-s-sm inline v-middle">
+                    <option value="0">Массовое действие</option>
+                    <option value="1">Удалить выбранные</option>
+                </select>
+                <button class="btn btn-sm btn-default" type="submit">Применить</button>
+            </div>
+            <div class="col-sm-4 text-center">
+                <small class="text-muted inline m-t-sm m-b-sm">Показано <?= ($ordersPage->current - 1) * $ordersPage->limit + 1 ?>-<?= (($ordersPage->current - 1) * $ordersPage->limit) + count($ordersPage->items) ?> из <?= $ordersPage->total_items ?> заказов</small>
+            </div>
+            <div class="col-sm-4 text-right text-center-xs">
+                <?$this->partial("shared/navigation",array("page" => $ordersPage, "base" => "orders"))?>
+            </div>
+        </div>
+    </footer>
+</section>
+<script>
+    $('#nav').addClass('nav-xs');
+    $('#nav-xs-link').addClass('active');
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("ordersTable");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount ++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>

@@ -1,0 +1,39 @@
+<?
+if( !isset($urlParams) OR !is_array($urlParams) )
+	$urlParams = array();
+?>
+												<ul class="pagination pagination-sm m-t-none m-b-none">
+													<?if( $page->before != $page->current ):?> 
+													<li><a href="<?=($page->before==1?$this->url->get($base, $urlParams):$this->url->get($base,array_merge($urlParams, array("page"=>$page->before))))?>"><i class="fa fa-chevron-left"></i></a></li>
+													<?else:?> 
+													<li><a href="<?=($page->before==1?$this->url->get($base, $urlParams):$this->url->get($base,array_merge($urlParams, array("page"=>$page->before))))?>" class="disabled"><i class="fa fa-chevron-left"></i></a></li>
+													<?endif;?> 
+													
+													<?if( $page->current > 3 ):?> 
+													<li><a href="<?=$this->url->get($base, $urlParams)?>">1</a></li>
+													<?if( $page->current > 5 ):?> 
+													<li><a href="javascript;" class="disabled">...</a></li>
+													<?endif;?> 
+													<?endif;?> 
+													
+													<?for( $i = ( $page->current - 2 > 0 ? $page->current - 2 : 1 ); $i <= ( $page->current + 2 < $page->last ? $page->current + 2 : $page->last ); $i++ ):?> 
+													<?if( $page->current == $i ):?> 
+													<li><a href="<?=$this->url->get($base,array_merge($urlParams, array("page"=>$i)))?>" class="disabled"><?=$i?></a></li>
+													<?else:?> 
+													<li><a href="<?=$this->url->get($base,array_merge($urlParams, array("page"=>$i)))?>"><?=$i?></a></li>
+													<?endif;?>
+													<?endfor;?>
+													 
+													<?if( $page->current != $page->last && ( $page->current + 2 ) <  $page->last ):?> 
+													<?if( ( $page->current + 3 ) != $page->last ):?> 
+													<li><a href="javascript;" class="disabled">...</a></li>
+													<?endif;?> 
+													<li><a href="<?=$this->url->get($base,array_merge($urlParams, array("page"=>$page->last)))?>"><?=$page->last?></a></li>
+													<?endif;?> 
+													
+													<?if( $page->current != $page->last ):?> 
+													<li><a href="<?=$this->url->get($base,array_merge($urlParams, array("page"=>$page->next)))?>"><i class="fa fa-chevron-right"></i></a></li>
+													<?else:?>
+													<li><a href="<?=$this->url->get($base,array_merge($urlParams, array("page"=>$page->next)))?>" class="disabled"><i class="fa fa-chevron-right"></i></a></li>
+													<?endif;?> 
+												</ul>

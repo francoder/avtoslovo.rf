@@ -1,0 +1,141 @@
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-sm-12">
+					<h4>Настройка аккаунта</h4>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="register-container">
+						<form method="post">
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="firstName">Имя и Фамилия</label>
+
+									<?=$settingsForm->render("firstName", array("class" => "big", "placeholder" => "Ваше имя"))?>
+									<?=$settingsForm->render("lastName", array("class" => "big", "placeholder" => "Ваша фамилия"))?>
+									<?foreach( $settingsForm->getMessagesFor("firstName") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="firstName" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<?foreach( $settingsForm->getMessagesFor("lastName") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="lastName" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="city">Город</label>
+									<div  role="ui.city">
+										<div role="input" class="btn-group full">
+											<input type="text" class="big full" placeholder="Ваш город" value="">
+											<ul class="dropdown-menu" role="results"></ul>
+										</div>
+										<div class="input-style" role="selected" class="hide">
+											<p style="display:inline-block; margin:0;" role="city"></p>
+											<span style="cursor:pointer;" role="cancel" title="Выбрать другой">&times;</span>
+										</div>
+										<?=$settingsForm->render("city", array("class" => "hide value"))?>
+									</div>
+									<?foreach( $settingsForm->getMessagesFor("city") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="city" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="phone">Телефон</label>
+									<?=$settingsForm->render("phone", array("class" => "big full", "placeholder" => "Ваш Телефон"))?>
+									<?foreach( $settingsForm->getMessagesFor("phone") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="phone" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="email">Email</label>
+									<?=$settingsForm->render("email", array("class" => "big full", "placeholder" => "Ваш Email"))?>
+									<?foreach( $settingsForm->getMessagesFor("email") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="email" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<button class="big" type="submit">Обновить</button>
+								</div>
+							</div>
+							<input type="hidden" name="form" value="user">
+							<div class="clearfix"></div>
+							<div class="clearfix"></div>
+							<div class="clearfix"></div>
+							<div class="clearfix"></div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-sm-12">
+					<h4>Смена пароля</h4>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="register-container">
+						<form method="post">
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="oldpassword">Старый пароль</label>
+									<?=$changePasswordForm->render("oldpassword", array("class" => "big full", "placeholder" => "Старый пароль"))?>
+									<?foreach( $changePasswordForm->getMessagesFor("oldpassword") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="phone" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="password">Новый пароль</label>
+									<?=$changePasswordForm->render("password", array("class" => "big", "placeholder" => "Новый пароль"))?>
+									<?=$changePasswordForm->render("passwordConfirm", array("class" => "big", "placeholder" => "Повторите новый пароль"))?>
+									<?foreach( $changePasswordForm->getMessagesFor("password") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="password" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<?foreach( $changePasswordForm->getMessagesFor("passwordConfirm") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="passwordConfirm" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<button class="big" type="submit">Изменить пароль</button>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<input type="hidden" name="form" value="password">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>

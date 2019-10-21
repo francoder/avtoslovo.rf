@@ -1,0 +1,94 @@
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>Мои автомобили</h3>
+			</div>
+			<?if( count($autos) ):?> 
+			<table class="table table-striped m-b-none">
+				<thead>
+					<tr>
+						<td style="widtd: 50px;">Номер</td>
+						<td>Марка</td>
+						<td>Модель</td>
+						<td>Производство</td>
+						<td>КП</td>
+						<td>Двигатель</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?foreach( $table AS $item ):
+						$options = array();
+						
+						foreach( $item["data"]->attribute AS $attribute )
+							$options[$attribute->attributes()["key"]->__toString()] = $attribute->attributes()["value"]->__toString();
+						?>
+					<tr>
+						<td>
+							<a data-bjax href="<?=$this->url->get("catalog", array(
+								"action" => "units",
+								"code" => $item["data"]->attributes()["catalog"]->__toString(),
+								"vid" => $item["data"]->attributes()["vehicleid"]->__toString(),
+								"ssd" => $item["data"]->attributes()["ssd"]->__toString(),
+								))?>">
+								<?=$item["data"]->attributes()["vehicleid"]?>
+							</a>
+						</td>
+						<td>
+							<a data-bjax href="<?=$this->url->get("catalog", array(
+								"action" => "units",
+								"code" => $item["data"]->attributes()["catalog"]->__toString(),
+								"vid" => $item["data"]->attributes()["vehicleid"]->__toString(),
+								"ssd" => $item["data"]->attributes()["ssd"]->__toString(),
+								))?>">
+								<?=$item["data"]->attributes()["brand"]?>
+							</a>
+						</td>
+						<td>
+							<a data-bjax href="<?=$this->url->get("catalog", array(
+								"action" => "units",
+								"code" => $item["data"]->attributes()["catalog"]->__toString(),
+								"vid" => $item["data"]->attributes()["vehicleid"]->__toString(),
+								"ssd" => $item["data"]->attributes()["ssd"]->__toString(),
+								))?>">
+								<?=$item["data"]->attributes()["name"]?>
+							</a>
+						</td>
+						<td>
+							<a data-bjax href="<?=$this->url->get("catalog", array(
+								"action" => "units",
+								"code" => $item["data"]->attributes()["catalog"]->__toString(),
+								"vid" => $item["data"]->attributes()["vehicleid"]->__toString(),
+								"ssd" => $item["data"]->attributes()["ssd"]->__toString(),
+								))?>">
+								<?=$options["market"]?>
+							</a>
+						</td>
+						<td>
+							<a data-bjax href="<?=$this->url->get("catalog", array(
+								"action" => "units",
+								"code" => $item["data"]->attributes()["catalog"]->__toString(),
+								"vid" => $item["data"]->attributes()["vehicleid"]->__toString(),
+								"ssd" => $item["data"]->attributes()["ssd"]->__toString(),
+								))?>">
+								<?=$options["transmission"]?>
+							</a>
+						</td>
+						<td>
+							<a data-bjax href="<?=$this->url->get("catalog", array(
+								"action" => "units",
+								"code" => $item["data"]->attributes()["catalog"]->__toString(),
+								"vid" => $item["data"]->attributes()["vehicleid"]->__toString(),
+								"ssd" => $item["data"]->attributes()["ssd"]->__toString(),
+								))?>">
+								<?=$options["engine"]?>
+							</a>
+						</td>
+					</tr>
+					<?endforeach;?>
+				</tbody>
+			</table>
+			<?else:?> 
+			<div class="empty">
+				<p>Ничего не найдено</p>
+			</div>
+			<?endif;?> 
+		</div>

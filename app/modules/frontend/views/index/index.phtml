@@ -1,0 +1,111 @@
+<?php
+$this->assets
+->collection("footer")
+->addJs("assets/js/main.js");
+?>
+<div class="row">
+    <div class="clearfix"></div>
+    <div class="col-sm-3" style="text-align:right;">
+
+        <button type="button" name="button" style="width:  100%;height: 35px;position:  relative;top: 38px;"><i class="fa fa-location-arrow" aria-hidden="true"></i> Барнаул</button>
+    </div>
+    <div class="col-sm-9">
+    <?php echo $this->partial("shared/search", ['catalogs' => !empty($catalogs) ? $catalogs : null]) ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        <div class="block" style="width:  100%; border-radius: 5px;background: #ffffff;margin: 10px 0;padding:  4px 20px;border: 1px solid #eee;">
+            <h4 style="border-bottom: 2px solid;padding: 0 0 10px 0;">Наши контакты г. Барнаул</h4>
+            <p class="contact-item">Антона Петрова, 239а</p>
+            <p class="contact-item">8983-357-5123 Whatsapp</p>
+            <p class="contact-item">8906-969-3163</p>
+            <p class="contact-item">8923-169-6867</p>
+            <a style="color: #fff;padding: 5px;" href="#feedback" class="btn-style" data-toggle="modal">Обратный звонок</a>
+        </div>
+        <div class="block block-text">
+            <p class="block-text-italic"><strong>Не тратьте время на изучение каталогов и поиска нужной запчасти. Звоните, пишите и наши консультанты вам помогут</strong></p>
+            <a class="block-text-button btn-style" href="#picking" data-toggle="modal">Написать</a>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div class="clearfix">
+
+        </div>
+        <!--<h3 style="position: relative;z-index: 2;background: #ffc700;font-size: 14px;padding: 10px 15px;border-radius: 10px;color: #000;line-height: 18px;">Уважаемые посетители!
+                Сайт находится в доработке, некоторые функции недоступны.
+                Приносим свои извинения за доставленные неудобства.
+                Рады ответить вам на все вопросы по указанным выше телефонам.<br>
+                P.S. Цены, указанные на сайте, актуальны.</h3>
+        <img src="<?= $this->url->get("assets/img/toyota.png") ?>" style="width:100%;top: -100px;position: relative;" alt="">-->
+        <style>
+            .owl-carousel .item{
+                width: 100%;
+                height: 410px;
+                background: #eee;
+            }
+            .owl-carousel  .owl-dots .owl-dot{
+                display: inline-block;
+            }
+            .owl-carousel .owl-stage-outer{
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .owl-carousel  .owl-dots .owl-dot span {
+                background: none repeat scroll 0 0 #869791;
+                border-radius: 20px;
+                display: block;
+                height: 12px;
+                margin: 5px 7px;
+                opacity: 0.5;
+                width: 12px;
+            }
+            .owl-carousel .owl-dots{
+                text-align: center;
+                padding: 10px 0;
+            }
+            .owl-carousel  .owl-dots .owl-dot.active span{
+                background: #f00;
+                opacity: 1;
+            }
+            .owl-nav{
+                display: none;
+            }
+            header.header{
+                background-color: rgb(255, 0, 0)!important;
+            }
+        </style>
+        <div class="owl-carousel">
+            <?php if(!empty($slides)): ?>
+            <?php foreach($slides AS $slide): ?>
+            <div class="item"> <img src="<?= $slide->path ?>" title="<?= addslashes($slide->title) ?>"
+                                    alt="<?= htmlentities($slide->name, ENT_COMPAT | ENT_HTML401, 'UTF-8') ?>"></div>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+        <script type="text/javascript">
+            $('.owl-carousel').owlCarousel({
+                margin: 10,
+                autoplay: true,
+                responsiveClass: true,
+                navigation: false,
+                dots: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true
+                    },
+                    600: {
+                        items: 1,
+                        nav: false
+                    },
+                    1000: {
+                        items: 1,
+                        nav: true,
+                        loop: true
+                    }
+                }
+            })
+        </script>
+    </div>
+</div>

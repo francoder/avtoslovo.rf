@@ -1,0 +1,8 @@
+
+\.idea/
+
+public/dashboard/attachments/
+
+vendor/
+
+app/modules/cli/tasks/attachments/

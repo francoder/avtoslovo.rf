@@ -1,0 +1,81 @@
+									<style scoped>
+									aside .nav .active > a {
+										text-decoration: none;
+										background-color: #eee;
+									}
+									</style>
+									<?if( isset($info->attributes()["supportquickgroups"]) AND $info->attributes()["supportquickgroups"][0] ):?> 
+									<div class="panel panel-default text-sm doc-buttons">
+										<div class="panel-body">
+											<a href="<?=$this->url->get("catalog", array(
+												"action" => "find",
+												"code" => $catalogCode,
+												"vid" => $vid,
+												"ssd" => $ssd,
+											))?>" class="btn btn-sm btn-default">Быстрый поиск</a>
+											<button class="btn btn-sm btn-default" disabled>Поиск по узлам</button>
+										</div>
+									</div>
+									<?endif;?> 
+									<section class="hbox">
+										<aside class="aside-md bg-light dker b-r">
+											<ul class="nav">
+												<?foreach( $categories->children() AS $category ):?> 
+												<li class="b-b <?=($category->attributes()["categoryid"]->__toString()==abs($cid)?"active":"")?>">
+													<a href="<?=$this->url->get("catalog", array(
+														"action" => "units",
+														"code" => $catalogCode,
+														"vid" => $vid,
+														"cid" => $category->attributes()["categoryid"]->__toString(),
+														"ssd" => $category->attributes()["ssd"]->__toString(),
+													))?>">
+														<?=$category->attributes()["name"]?>
+													</a>
+												</li>
+												<?endforeach;?> 
+											</ul>
+										</aside>
+										<aside>
+											<div class="row row-sm">
+												<?$countXs = 0;$countSm = 0;$countMd = 0;
+												foreach( $units->children() AS $unit ):
+													$countXs++;$countSm++;$countMd++;?> 
+												<div class="col-xs-6 col-sm-4 col-md-3">
+													<div class="thumbnail">
+														<a href="<?=$this->url->get("catalog", array(
+															"action" => "unit",
+															"code" => $catalogCode,
+															"vid" => $vid,
+															"ssd" => $unit->attributes()["ssd"]->__toString(),
+															"uid" => $unit->attributes()["unitid"]->__toString(),
+														))?>" title="<?=$unit->attributes()["note"]?>">
+															<img src="<?=str_replace("%size%", "source", $unit->attributes()["imageurl"]->__toString())?>">
+														</a>
+														<div class="caption">
+															<a href="<?=$this->url->get("catalog", array(
+																"action" => "unit",
+																"code" => $catalogCode,
+																"vid" => $vid,
+																"ssd" => $unit->attributes()["ssd"]->__toString(),
+																"uid" => $unit->attributes()["unitid"]->__toString(),
+															))?>" title="<?=$unit->attributes()["note"]?>">
+																<b><?=$unit->attributes()["code"]?></b>
+																<?=$unit->attributes()["name"]?>
+															</a>
+														</div>
+													</div>
+												</div>
+												<?if( $countXs == 2 ): $countXs = 0;?> 
+												<div class="clearfix visible-xs-block"></div>
+												<?endif;?> 
+												<?if( $countSm == 3 ): $countSm = 0;?> 
+												<div class="clearfix visible-sm-block"></div>
+												<?endif;?> 
+												<?if( $countMd == 4 ): $countMd = 0;?> 
+												<div class="clearfix visible-md-block"></div>
+												<div class="clearfix visible-lg-block"></div>
+												<?endif;?> 
+												<?endforeach;?> 
+											</div>
+										</aside>
+									</section>

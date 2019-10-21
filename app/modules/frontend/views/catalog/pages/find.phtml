@@ -1,0 +1,74 @@
+<?$this->assets
+->collection("footer")
+->addJs("assets/js/catalog/find.js");?>
+<div class="panel panel-default text-sm doc-buttons">
+    <div class="panel-body">
+        <button class="btn btn-sm btn-default" disabled>Быстрый поиск</button>
+        <a href="<?=
+        $this->url->get("catalog", array(
+            "action" => "units",
+            "code" => $catalogCode,
+            "vid" => $vid,
+            "ssd" => $ssd,
+        ))
+        ?>" class="btn btn-sm btn-default">Поиск по узлам</a>
+    </div>
+</div>
+<section class="hbox stretch multinav">
+
+    <div class="col-sm-4">
+        <div class="find">
+            <div class="find-field">
+                <input class="full-width big" type="text" role="search" value="" placeholder="Введите название детали">
+            </div>
+            <aside class="aside-md bg-light dker b-r">
+                <style>
+                    aside .nav .active > a {
+                        text-decoration: none;
+                        background-color: #eee;
+                    }
+                    aside .nav .nav {
+                        display: none;
+                    }
+                    aside .nav .nav li a {
+                    }
+                    aside .nav .active > .nav {
+                        display: block;
+                    }
+                </style>
+                <ul class="nav">
+                    <?php if(!empty($list)): ?>
+                    <?
+                    $base = (count($list->children()) > 1?$list:$list->children()[0]);
+                    ?>
+                    <?foreach( $base->children() AS $item ):?>
+                    <li class="b-b">
+                        <a href="#" data-queryparams="<?=
+                        htmlspecialchars(json_encode(array(
+                            "id" => $item->attributes()["quickgroupid"]->__toString(),
+                            "link" => ($item->attributes()["link"]->__toString() == "true" ? true : false),
+                            "code" => $catalogCode,
+                            "vid" => $vid,
+                            "ssd" => $ssd,
+                        )))
+                        ?>" data-id="<?= $item->attributes()["quickgroupid"]->__toString() ?>">
+                            <?if( count($item->children()) > 0 ):?>
+                            <i class="fa fa-plus-square-o m-t-xs text-xs icon-muted"></i>
+                            <?endif;?>
+                            <?= $item->attributes()["name"] ?>
+                        </a>
+                        <?if( count($item->children()) > 0 ):?>
+                        <?= $this->partial("catalog/pages/findMenu") ?>
+                        <?endif;?>
+                    </li>
+                    <?endforeach;?>
+                    <?php endif; ?>
+                </ul>
+            </aside>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <aside role="items" style="display: none;"></aside>
+        <aside role="list" style="opacity: 0;"></aside>
+    </div>
+</section>

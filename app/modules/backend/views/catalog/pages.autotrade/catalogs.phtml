@@ -1,0 +1,25 @@
+								<div class="row">
+									<div class="col-sm-12">
+										<section class="panel panel-default">
+											<header class="panel-heading">
+												Каталоги
+											</header>
+											<table class="table table-striped m-b-none">
+												<thead>
+													<tr>
+														<th style="width: 50px;">ID</th>
+														<th>Название</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?foreach( $catalogs AS $catalog ):?> 
+													<tr>
+														<td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "catalog", "id" => $catalog->id))?>"><?=$catalog->id?></a></td>
+														<td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "catalog", "id" => $catalog->id))?>"><?=$catalog->name?></a></td>
+													</tr>
+													<?endforeach;?> 
+												</tbody>
+											</table>
+										</section>
+									</div>
+								</div>

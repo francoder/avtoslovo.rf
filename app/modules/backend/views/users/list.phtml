@@ -1,0 +1,84 @@
+<?
+$this->assets
+	->collection("footer")
+	->addJs("assets/js/usersList.js");
+?> 
+								<section class="panel panel-default">
+									<header class="panel-heading">
+										Пользователи
+									</header>
+									<div class="row wrapper">
+										<div class="col-sm-5 m-b-xs" role="bulk">
+											<select class="input-sm form-control input-s-sm inline v-middle">
+												<option value="0">Массовое действие</option>
+												<option value="1">Удалить выбранные</option>
+											</select>
+											<button class="btn btn-sm btn-default" type="submit">Применить</button>
+										</div>
+										<div class="col-sm-4 m-b-xs"></div>
+										<div class="col-sm-3">
+											<div class="input-group">
+												<input class="input-sm form-control" placeholder="Поиск" type="text">
+												<span class="input-group-btn">
+													<button class="btn btn-sm btn-default" type="button">Go!</button>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="table-responsive">
+										<form method="post" role="bulkForm">
+											<table class="table table-striped b-t b-light">
+												<thead>
+													<tr>
+														<th width="20">
+															<label class="checkbox m-l m-t-none m-b-none i-checks">
+																<input type="checkbox"><i></i>
+															</label>
+														</th>
+														<th>ID</th>
+														<th>Имя</th>
+														<th>Город</th>
+														<th>Телефон</th>
+														<th>Email</th>
+														<th>Группа</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?foreach( $usersPage->items AS $user ):?> 
+													<tr>
+														<td>
+															<label class="checkbox m-l m-t-none m-b-none i-checks">
+																<input name="bulk[]" value="<?=$user->id?>" type="checkbox"><i></i>
+															</label>
+														</td>
+														<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->id?></a></td>
+														<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->getFullName()?></a></td>
+														<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->getCityName()?></a></td>
+														<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->getPhoneFormatted()?></a></td>
+														<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->email?></a></td>
+														<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->group->title?></a></td>
+													</tr>
+													<?endforeach;?> 
+												</tbody>
+											</table>
+											<input type="hidden" name="bulkAction" value="0">
+										</form>
+									</div>
+									<footer class="panel-footer">
+										<div class="row">
+											<div class="col-sm-4 hidden-xs" role="bulk">
+												<select class="input-sm form-control input-s-sm inline v-middle">
+													<option value="0">Массовое действие</option>
+													<option value="1">Удалить выбранные</option>
+												</select>
+												<button class="btn btn-sm btn-default" type="submit">Применить</button>
+											</div>
+											<div class="col-sm-4 text-center">
+												<small class="text-muted inline m-t-sm m-b-sm">Показано <?=($usersPage->current-1)*$usersPage->limit+1?>-<?=(($usersPage->current-1)*$usersPage->limit)+count($usersPage->items)?> из <?=$usersPage->total_items?> пользователей</small>
+											</div>
+											<div class="col-sm-4 text-right text-center-xs">
+<?$this->partial("shared/navigation",array("page" => $usersPage, "base" => "users"))?> 
+											</div>
+										</div>
+									</footer>
+								</section>

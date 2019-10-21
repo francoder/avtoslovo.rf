@@ -1,0 +1,84 @@
+<?
+$this->assets
+	->collection("footer")
+	->addJs("assets/js/order.js")
+?>
+			<div class="row">
+				<div class="col-sm-12">
+					<h3>
+						Заказ #<?=$order->id?> от <?=$order->getCreatedDateTime()->format("d.m.Y H:i")?>
+						<?if( !$order->isClosed() ):?> 
+						<button type="button" class="btn" role="cancelOrder" data-id="<?=$order->id?>">Отменить заказ</button>
+						<?endif;?> 
+						<button type="button" class="btn" role="reOrder" data-id="<?=$order->id?>">Повторить заказ</button>
+					</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="table-container">
+						<table>
+							<tbody>
+								<tr>
+									<td>Время создания</td>
+									<td><?=$order->getCreatedDateTime()->format("d.m.Y H:i")?></td>
+								</tr>
+								<tr>
+									<td>Планируется доставка</td>
+									<td><?=$order->getDeliveryDateTime()->format("d.m.Y")?></td>
+								</tr>
+								<tr>
+									<td>Стоимость</td>
+									<td><?=number_format($order->amount, 0, ",", " ")?> р.</td>
+								</tr>
+								<tr>
+									<td>Статус</td>
+									<td><?=$order->getStatus()?></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+                </div>
+				<div class="col-md-8">
+					<div class="table-container">
+						<table>
+							<thead>
+								<tr>
+									<td>Производитель</td>
+									<td>Название</td>
+									<td>Количество</td>
+									<td>Цена</td>
+									<td>Статус</td>
+									<td>Ожидается</td>
+								</tr>
+							</thead>
+							<tbody>
+								<?foreach( json_decode($order->items) AS $item ):?> 
+								<tr>
+									<td><?=$item->brand?><br><strong><?= $item->article ?></strong></td>
+									<td><?=$item->title?></td>
+									<td><?=$item->count?>&nbsp;шт.</td>
+									<td><?=number_format($item->price, 0, ",", "&nbsp;")?>&nbsp;р.</td>
+									<td>
+                                        <?=$order->getItemStatuses()[$item->status]?>
+                                        <br>
+                                        <?php if($order->status == 1): ?>
+                                            <form action="<?=$this->url->get("cart/createOrder")?>" method="post">
+                                                <input type="hidden" name="orderId" value="<?= $order->id ?>">
+                                                <button type="submit" class="btn btn-sm">Оплатить заказ</button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </td>
+                                    <?php if(isset($item->delivery)): ?>
+									<td><?=$order->getCreatedDateTime()->modify("+ " . $item->delivery  . " days")->format("d.m.Y")?></td>
+                                    <?php else: ?>
+                                    <td>В наличии</td>
+                                    <?php endif; ?>
+
+								</tr>
+								<?endforeach;?> 
+							</tbody>
+						</table>
+					</div>
+                </div>
+			</div>

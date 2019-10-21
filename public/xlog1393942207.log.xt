@@ -1,0 +1,12 @@
+TRACE START [2018-01-30 08:00:52]
+    0.0003     238288     -> error_reporting(32767) /var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/public/index.php:8
+                           >=> 22527
+    0.0003     238472     -> realpath('..') /var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/public/index.php:10
+                           >=> '/var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai'
+    0.0003     238544     -> define('ROOT_DIR', '/var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai') /var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/public/index.php:10
+                           >=> TRUE
+    0.0004     238544     -> define('MODULE', 'frontend') /var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/public/index.php:11
+                           >=> TRUE
+    0.0004     239472     -> require_once(/var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/app/bootstrap.php) /var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/public/index.php:13
+    0.0004     239776       -> Phalcon\Di\FactoryDefault->__construct() /var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/app/bootstrap.php:8
+    0.0005     239872         -> Phalcon\Di->__construct() /var/www/avtoslovorf/data/www/xn--80aea9aobbuh.xn--p1ai/app/bootstrap.php:8

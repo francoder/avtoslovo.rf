@@ -1,0 +1,140 @@
+								<div class="row m-b-md">
+									<div class="col-sm-6">
+										<h3 class="m-b-xs text-black">Панель управления</h3>
+										<small>Туча информации</small>
+									</div>
+								</div>
+								<section class="panel panel-default">
+									<header class="panel-heading bg-light">
+										<ul class="nav nav-tabs nav-justified">
+											<li class="active">
+												<a href="#orders" data-toggle="tab">
+													Заказы
+													<span class="label bg-danger"><?=$ordersCount?> необработанных</span>
+												</a>
+											</li>
+											<li class="">
+												<a href="#feedback" data-toggle="tab">
+													Обратная связь
+													<span class="label bg-danger"><?=$feedBackCount?> необработанных</span>
+												</a>
+											</li>
+											<li class="">
+												<a href="#users" data-toggle="tab">
+													Пользователи
+												</a>
+											</li>
+										</ul>
+									</header>
+									<div class="">
+										<div class="tab-content">
+											<div id="orders" class="tab-pane active">
+												<table class="table table-striped m-b-none">
+													<thead>
+														<tr>
+															<th>ID</th>
+															<th>Время создания</th>
+															<th>Клиент</th>
+															<th>Количество позиций</th>
+															<th>Стоимость</th>
+															<th>Статус</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?foreach( $orders AS $order ):?> 
+														<tr>
+															<td>
+																<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+																	<?=$order->id?>
+																</a>
+															</td>
+															<td>
+																<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+																	<?=$order->getCreatedDateTime()->format("d.m.Y H:i")?>
+																</a>
+															</td>
+															<td>
+																<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+																	<?=$order->user->getFullName()?>
+																	(<?=$order->user->phone?>)
+																</a>
+															</td>
+															<td>
+																<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+																	<?=count(json_decode($order->items))?>
+																</a>
+															</td>
+															<td>
+																<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+																	<?=number_format($order->amount, 2, ",", " ")?> р.
+																</a>
+															</td>
+															<td>
+																<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+																	<span class="status-badge status-<?=$order->status?>"><?=$order->getStatus()?></span>
+																</a>
+															</td>
+														</tr>
+														<?endforeach;?> 
+													</tbody>
+												</table>
+											</div>
+											<div id="feedback" class="tab-pane">
+												<table class="table table-striped m-b-none">
+													<thead>
+														<tr>
+															<th>ID</th>
+															<th>Дата</th>
+															<th>Имя</th>
+															<th>Телефон</th>
+															<th>Комментарий</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?foreach( $feedBack AS $item ):?> 
+														<tr>
+															<td><?=$item->id?></td>
+															<td><?=$item->getCreatedDateTime()->format("d.m.Y H:i")?></td>
+															<td><?=$item->name?></td>
+															<td><?=$item->getPhoneFormatted()?></td>
+															<td>
+																<div class="row">
+																	<div class="col-sm-12">
+																		<textarea name="note" class="form-control m-b" readonly style="width: 100%;"><?=$item->comment?></textarea>
+																	</div>
+																</div>
+															</td>
+														</tr>
+														<?endforeach;?> 
+													</tbody>
+												</table>
+											</div>
+											<div id="users" class="tab-pane">
+												<table class="table table-striped m-b-none">
+													<thead>
+														<tr>
+															<th>ID</th>
+															<th>Имя</th>
+															<th>Город</th>
+															<th>Телефон</th>
+															<th>Email</th>
+															<th>Группа</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?foreach( $users AS $user ):?> 
+														<tr>
+															<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->id?></a></td>
+															<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->getFullName()?></a></td>
+															<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->getCityName()?></a></td>
+															<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->getPhoneFormatted()?></a></td>
+															<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->email?></a></td>
+															<td><a data-bjax href="<?=$this->url->get(array("for" => "user", "id" => $user->id))?>"><?=$user->group->title?></a></td>
+														</tr>
+														<?endforeach;?> 
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</section>

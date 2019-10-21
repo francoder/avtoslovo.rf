@@ -1,0 +1,392 @@
+<?
+$this->assets
+	->addCss("assets/js/datetimepicker/css/bootstrap-datetimepicker.min.css");
+$this->assets
+	->collection("footer")
+	->addJs("assets/js/datetimepicker/js/bootstrap-datetimepicker.min.js")
+	->addJs("assets/js/catalog/suppliers.js");
+
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+?> 
+								<section class="row m-b-md">
+									<div class="col-sm-12">
+										<h3 class="m-b-xs text-black">Поставщики по API</h3>
+									</div>
+								</section>
+								<form method="post" action="<?=$this->url->get("catalog/suppliers")?>">
+									<section class="panel panel-default">
+										<header class="panel-heading">Настройка поставщиков</header>
+										<table class="table table-striped m-b-none" role="api">
+											<thead>
+												<tr>
+													<th style="width: 50px;">Активность</th>
+													<th style="width: 50px;">CODE</th>
+													<th>Название</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody>
+												<?foreach( $suppliers AS $supplier ):?> 
+												<tr role="row">
+													<td>
+														<label class="checkbox m-l m-t-none m-b-none i-checks">
+															<input type="checkbox" name="active[<?=$supplier["code"]?>]" value="Y" <?=($supplier["active"]?"checked":"")?>>
+															<i></i>
+														</label>
+													</td>
+													<td><?=$supplier["code"]?></td>
+													<td><?=$supplier["title"]?></td>
+													<td style="padding: 0px;">
+														<section class="panel panel-default hiddenonstart" style="display: none;">
+															<header class="panel-heading bg-light">
+																<ul class="nav nav-tabs nav-justified">
+																	<li class="active">
+																		<a href="#<?=$supplier["code"]?>Markups" data-toggle="tab">Цены</a>
+																	</li>
+																	<li class="">
+																		<a href="#<?=$supplier["code"]?>Storages" data-toggle="tab">Склады</a>
+																	</li>
+																	<li class="">
+																		<a href="#<?=$supplier["code"]?>Brands" data-toggle="tab">Бренды</a>
+																	</li>
+																</ul>
+															</header>
+															<div class="panel-body">
+																<div class="tab-content">
+																	<div id="<?=$supplier["code"]?>Markups" class="tab-pane active">
+																		<div role="markups" data-code="<?=$supplier["code"]?>">
+																			<table style="width: 100%;">
+																				<thead>
+																					<tr>
+																						<th>При стоимости более</th>
+																						<th>%</th>
+																						<th>Фиксировано</th>
+																						<th></th>
+																					</tr>
+																				</thead>
+																				<?if( $supplier["data"] ):?> 
+																				<tbody role="list" data-count="<?=count($supplier["data"]->getMarkups())?>">
+																					<?foreach( $supplier["data"]->getMarkups() AS $key => $markup ):?> 
+																					<tr>
+																						<td><input type="text" class="form-control" name="markup[<?=$supplier["code"]?>][<?=$key?>][value]" value="<?=$markup->value?>"></td>
+																						<td><input type="text" class="form-control" name="markup[<?=$supplier["code"]?>][<?=$key?>][percent]" value="<?=$markup->percent?>"></td>
+																						<td><input type="text" class="form-control" name="markup[<?=$supplier["code"]?>][<?=$key?>][fixed]" value="<?=$markup->fixed?>"></td>
+																						<td><a role="removeItem">&times;</a></td>
+																					</tr>
+																					<?endforeach;?> 
+																				</tbody>
+																				<?else:?> 
+																				<tbody role="list" data-count="0"></tbody>
+																				<?endif;?> 
+																				<tfoot>
+																					<tr>
+																						<th colspan="4">
+																							<button class="btn" role="add">Добавить</button>
+																						</th>
+																					</tr>
+																				</tfoot>
+																			</table>
+																		</div>
+																	</div>
+																	<div id="<?=$supplier["code"]?>Storages" class="tab-pane">
+																		<div role="storages" >
+																			<table style="width: 100%;">
+																				<thead>
+																					<tr>
+																						<th>Активность</th>
+																						<th>Отказы</th>
+																						<th>Склад</th>
+																						<th>Добавить дней доставки</th>
+																					</tr>
+																				</thead>
+																				<tbody>
+																					<?foreach( $supplier["storages"] AS $key => $storage ):?> 
+																					<tr>
+																						<td>
+																							<input
+																								type="checkbox"
+																								class="form-control"
+																								name="storagesActives[<?=$supplier["code"]?>][<?=$storage->id?>]"
+																								value="1"
+																								<?=($supplier["data"]&&$supplier["data"]->getStorageActive($storage->id)?"checked":"")?>
+																								>
+																						</td>
+																						<td>
+																							<select name="storagesRate[<?=$supplier["code"]?>][<?=$storage->id?>]">
+																								<?for($i = 1; $i < 6; $i++):?> 
+																								<option value="<?=$i?>" <?=($supplier["data"]&&$supplier["data"]->getStorageRate($storage->id)==$i?"selected":"")?>><?=$i?></option>
+																								<?endfor;?> 
+																							</select>
+																						</td>
+																						<td><?=$storage->name?></td>
+																						<td>
+																							<input type="text" class="form-control" name="storages[<?=$supplier["code"]?>][<?=$storage->id?>]" value="<?=($supplier["data"]?$supplier["data"]->getStorageUp($storage->id):0)?>">
+																						</td>
+																					</tr>
+																					<tr>
+																						<td colspan="5">
+																							<div class="row">
+																								<div class="col-md-3">
+																									<div class="form-group">
+																										<label>Поставлено %</label>
+																										<input class="form-control" type="text" name="storagesStat[<?=$supplier["code"]?>][<?=$storage->id?>][all]" value="<?=($supplier["data"]?$supplier["data"]->getStorageStat($storage->id)["all"]:"")?>">
+																									</div>
+																								</div>
+																								<div class="col-md-3">
+																									<div class="form-group">
+																										<label>Быстрее %</label>
+																										<input class="form-control" type="text" name="storagesStat[<?=$supplier["code"]?>][<?=$storage->id?>][before]" value="<?=($supplier["data"]?$supplier["data"]->getStorageStat($storage->id)["before"]:"")?>">
+																									</div>
+																								</div>
+																								<div class="col-md-3">
+																									<div class="form-group">
+																										<label>Вовремя %</label>
+																										<input class="form-control" type="text" name="storagesStat[<?=$supplier["code"]?>][<?=$storage->id?>][intime]" value="<?=($supplier["data"]?$supplier["data"]->getStorageStat($storage->id)["intime"]:"")?>">
+																									</div>
+																								</div>
+																								<div class="col-md-3">
+																									<div class="form-group">
+																										<label>С задержкой %</label>
+																										<input class="form-control" type="text" name="storagesStat[<?=$supplier["code"]?>][<?=$storage->id?>][fail]" value="<?=($supplier["data"]?$supplier["data"]->getStorageStat($storage->id)["fail"]:"")?>">
+																									</div>
+																								</div>
+																							</div>
+																						</td>
+																					</tr>
+																					<?endforeach;?> 
+																				</tbody>
+																			</table>
+																		</div>
+																	</div>
+																	<div id="<?=$supplier["code"]?>Brands" class="tab-pane">
+																		<table style="width: 100%" role="brandsTable" data-supplier="<?=$supplier["code"]?>">
+																			<thead>
+																				<tr>
+																					<th>Брэнд</th>
+																					<th>Цены</th>
+																					<th style="width: 150px;"><button type="button" role="newBrand" class="btn btn-succcess">Добавить новый</button></th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<?if( $supplier["data"] ):?> 
+																				<?foreach( $supplier["data"]->getBrands() AS $brandKey => $brand ):?>
+																				<tr class="item" data-count="<?=$brandKey?>">
+																					<td><input class="form-control" name="brands[<?=$supplier["code"]?>][<?=$brandKey?>][code]" placeholder="Код бренда" value="<?=htmlspecialchars($brand->code)?>"></td>
+																					<td><button type="button" role="brandPrices" class="btn btn-succcess">Управление наценками</button></td>
+																					<td><button type="button" role="brandRemove" class="btn btn-danger">Удалить</button></td>
+																				</tr>
+																				<tr data-count="<?=$brandKey?>" style="display: none;">
+																					<td colspan="3" style="padding: 0px;">
+																						<table style="width: 100%;" role="brandMarkups" data-supplier="<?=$supplier["code"]?>" data-count="<?=$brandKey?>">
+																							<thead>
+																								<tr>
+																									<th>При стоимости более</th>
+																									<th>%</th>
+																									<th>Фиксировано</th>
+																									<th></th>
+																								</tr>
+																							</thead>
+																							<tbody>
+																								<?foreach( $brand->markups AS $markUpKey => $markup ):?> 
+																								<tr class="markupRow">
+																									<td><input type="text" class="form-control" name="brands[<?=$supplier["code"]?>][<?=$brandKey?>][markups][<?=$markUpKey?>][value]" value="<?=htmlspecialchars($markup->value)?>"></td>
+																									<td><input type="text" class="form-control" name="brands[<?=$supplier["code"]?>][<?=$brandKey?>][markups][<?=$markUpKey?>][percent]" value="<?=htmlspecialchars($markup->percent)?>"></td>
+																									<td><input type="text" class="form-control" name="brands[<?=$supplier["code"]?>][<?=$brandKey?>][markups][<?=$markUpKey?>][fixed]" value="<?=htmlspecialchars($markup->fixed)?>"></td>
+																									<td><button type="button" class="btn btn-danger" role="removeMarkup">&times;</button></td>
+																								</tr>
+																								<?endforeach;?> 
+																							</tbody>
+																							<tfoot>
+																								<tr>
+																									<td colspan="4"><button type="button" role="addMarkup" class="btn btn-succcess">Добавить вариант</button></td>
+																								</tr>
+																							</tfoot>
+																						</table>
+																					</td>
+																				</tr>
+																				<?endforeach;?>
+																				<?endif;?>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</section>
+													</td>
+												</tr>
+												<?endforeach;?> 
+											</tbody>
+										</table>
+									</section>
+									<button type="submit" class="btn btn-primary">Сохранить</button>
+									
+									<input type="hidden" name="form" value="api">
+								</form>
+								<section class="row m-b-md">
+									<div class="col-sm-12">
+										<h3 class="m-b-xs text-black">Поставщики Excel</h3>
+									</div>
+								</section>
+								<form method="post">
+									<section class="panel panel-default" role="local">
+										<header class="panel-heading">
+											Настройка поставщиков
+											<button type="button" class="btn btn-default btn-xs dropdown-toggle" role="new">Добавить нового</button>
+										</header>
+										<table class="table table-striped m-b-none" role="ltable">
+											<thead>
+												<tr>
+													<th style="width: 50px;">ID</th>
+													<th style="width: 400px;">Инфо</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody>
+												<?foreach( $suppliersLocal AS $key => $supplier ):?> 
+												<tr role="row">
+													<td>
+														<?=$supplier->id?>
+														<input type="hidden" name="local[<?=$key?>][id]" value="<?=$supplier->id?>">
+													</td>
+													<td>
+														<div class="form-group">
+															<label class="checkbox m-l m-t-none m-b-none i-checks">
+																<input type="checkbox" name="local[<?=$key?>][active]" value="Y" <?=($supplier->isActive()?"checked":"")?>>
+																<i></i>
+																Активен
+															</label>
+														</div>
+                                                        <div class="form-group">
+                                                            <label class="checkbox m-l m-t-none m-b-none i-checks">
+                                                                <input type="checkbox" name="local[<?=$key?>][contract]" value="Y" <?=($supplier->isContract()?"checked":"")?>>
+                                                                <i></i>
+                                                                Контрактные запчасти
+                                                            </label>
+                                                        </div>
+														<div class="hiddenonstart" style="display:none;">
+															<div class="form-group">
+																<label>Конец активности</label>
+																<input type="text" class="form-control datetime" name="local[<?=$key?>][activeTo]" value="<?=($supplier->activeTo!=""?$supplier->getActiveToDatetime()->format("d.m.Y H:i"):"")?>" placeholder="Конец активности">
+															</div>
+															<div class="form-group">
+																<label>Код</label>
+																<input type="text" class="form-control" name="local[<?=$key?>][code]" value="<?=htmlspecialchars($supplier->code)?>" placeholder="Код поставщика (На английском, без пробелов)">
+															</div>
+														</div>
+														<div class="form-group">
+															<div class="hiddenonstart" style="display:none;">
+																<label>Название</label>
+															</div>
+															<input type="text" class="form-control" name="local[<?=$key?>][title]" value="<?=htmlspecialchars($supplier->title)?>" placeholder="Название поставщика">
+														</div>
+														<div class="hiddenonstart" style="display:none;">
+															<div class="form-group">
+																<button type="button" class="btn" role="removeSupplier">Удалить поставщика</button>
+																<button type="submit" class="btn btn-primary">Сохранить</button>
+															</div>
+														</div>
+													</td>
+													<td style="padding: 0px;">
+														<div class="hiddenonstart" style="display:none;">
+															<section class="panel panel-default">
+																<header class="panel-heading bg-light">
+																	<ul class="nav nav-tabs nav-justified">
+																		<li class="active">
+																			<a href="#<?=$key?>Markups" data-toggle="tab">Цены</a>
+																		</li>
+																		<li class="">
+																			<a href="#<?=$key?>Storages" data-toggle="tab">Склады</a>
+																		</li>
+																	</ul>
+																</header>
+																<div class="panel-body">
+																	<div class="tab-content">
+																		<div id="<?=$key?>Markups" class="tab-pane active">
+																			<div role="localmarkups" data-code="<?=$key?>">
+																				<table style="width: 100%;">
+																					<thead>
+																						<tr>
+																							<th>При стоимости более</th>
+																							<th>%</th>
+																							<th>Фиксировано</th>
+																							<th></th>
+																						</tr>
+																					</thead>
+																					<tbody role="list">
+																						<?foreach( $supplier->getMarkups() AS $mkey => $markupItem ):?> 
+																						<tr>
+																							<td><input type="text" class="form-control" name="local[<?=$key?>][markups][<?=$mkey?>][value]" value="<?=$markupItem->value?>"></td>
+																							<td><input type="text" class="form-control" name="local[<?=$key?>][markups][<?=$mkey?>][percent]" value="<?=$markupItem->percent?>"></td>
+																							<td><input type="text" class="form-control" name="local[<?=$key?>][markups][<?=$mkey?>][fixed]" value="<?=$markupItem->fixed?>"></td>
+																							<td><a role="removeItem">&times;</a></td>
+																						</tr>
+																						<?endforeach;?> 
+																					</tbody>
+																					<tfoot>
+																						<tr>
+																							<th colspan="4">
+																								<button class="btn" role="add">Добавить</button>
+																							</th>
+																						</tr>
+																					</tfoot>
+																				</table>
+																			</div>
+																		</div>
+																		<div id="<?=$key?>Storages" class="tab-pane">
+																			<div class="form-group">
+																				<label>Наименование склада</label>
+																				<input type="text" class="form-control" name="local[<?=$key?>][stockName]" value="<?=htmlspecialchars($supplier->stockName)?>" placeholder="Наименование склада">
+																			</div>
+																			<div class="form-group">
+																				<label>Время доставки в днях</label>
+																				<input type="text" class="form-control" name="local[<?=$key?>][delivery]" value="<?=htmlspecialchars($supplier->delivery)?>" placeholder="Время доставки">
+																			</div>
+																			<div class="form-group">
+																				<label>Отказы</label>
+																				<select class="form-control" name="local[<?=$key?>][deliveryRate]">
+																					<?for($i = 1; $i < 6; $i++):?> 
+																					<option value="<?=$i?>" <?=($supplier->deliveryRate==$i?"selected":"")?>><?=$i?></option>
+																					<?endfor;?> 
+																				</select>
+																			</div>
+																			<div class="row">
+																				<div class="col-md-3">
+																					<div class="form-group">
+																						<label>Поставлено %</label>
+																						<input class="form-control" type="text" name="local[<?=$key?>][deliveryStat][all]" value="<?=$supplier->getDeliveryStat()["all"]?>">
+																					</div>
+																				</div>
+																				<div class="col-md-3">
+																					<div class="form-group">
+																						<label>Быстрее %</label>
+																						<input class="form-control" type="text" name="local[<?=$key?>][deliveryStat][before]" value="<?=$supplier->getDeliveryStat()["before"]?>">
+																					</div>
+																				</div>
+																				<div class="col-md-3">
+																					<div class="form-group">
+																						<label>Вовремя %</label>
+																						<input class="form-control" type="text" name="local[<?=$key?>][deliveryStat][intime]" value="<?=$supplier->getDeliveryStat()["intime"]?>">
+																					</div>
+																				</div>
+																				<div class="col-md-3">
+																					<div class="form-group">
+																						<label>С задержкой %</label>
+																						<input class="form-control" type="text" name="local[<?=$key?>][deliveryStat][fail]" value="<?=$supplier->getDeliveryStat()["fail"]?>">
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</section>
+														</div>
+													</td>
+												</tr>
+												<?endforeach;?> 
+											</tbody>
+										</table>
+									</section>
+									<button type="submit" class="btn btn-primary">Сохранить</button>
+									
+									<input type="hidden" name="form" value="local">
+								</form>

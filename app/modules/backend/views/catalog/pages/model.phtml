@@ -1,0 +1,51 @@
+									<div class="row">
+										<div class="col-sm-12">
+											<section class="panel panel-default">
+												<header class="panel-heading">
+													Выберите комплектацию
+												</header>
+												<table class="table table-striped m-b-none">
+													<thead>
+														<tr>
+															<th style="width: 50px;">CODE</th>
+															<th>Название</th>
+															<th>Информация</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?foreach( $model->children() AS $variant ):?> 
+														<tr>
+															<td>
+																<a data-bjax href="<?=$this->url->get("catalog", array(
+																	"action" => $newxtaction,
+																	"code" => $catalogCode,
+																	"vid" => $variant->attributes()["vehicleid"]->__toString(),
+																	"ssd" => $variant->attributes()["ssd"]->__toString(),
+																	))?>">
+																	<?=$variant->attributes()["vehicleid"]?>
+																</a>
+															</td>
+															<td>
+																<a data-bjax href="<?=$this->url->get("catalog", array(
+																	"action" => $newxtaction,
+																	"code" => $catalogCode,
+																	"vid" => $variant->attributes()["vehicleid"]->__toString(),
+																	"ssd" => $variant->attributes()["ssd"]->__toString(),
+																	))?>">
+																	<?=$variant->attributes()["name"]?>
+																</a>
+															</td>
+															<td>
+																<ul>
+																	<?foreach( $variant->children() AS $option ):?> 
+																	<li><?=$option->attributes()["name"]?>: <?=$option->attributes()["value"]?></li>
+																	<?endforeach;?> 
+																</ul>
+															</td>
+														</tr>
+														<?endforeach;?> 
+													</tbody>
+												</table>
+											</section>
+										</div>
+									</div>

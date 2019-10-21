@@ -1,0 +1,160 @@
+								<section class="panel panel-default">
+									<header class="panel-heading font-bold">
+										Заказ #<?=$order->id?> &mdash; От <?=$order->getCreatedDateTime()->format("d.m.Y H:i")?>
+									</header>
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-md-4">
+												<table class="table table-striped m-b-none">
+													<tbody>
+														<tr>
+															<td>Время создания заказа</td>
+															<td><?=$order->getCreatedDateTime()->format("d.m.Y H:i")?></td>
+														</tr>
+														<tr>
+															<td>Планируется доставка</td>
+															<td><?=$order->getDeliveryDateTime()->format("d.m.Y")?></td>
+														</tr>
+														<tr>
+															<td>Клиент</td>
+															<td>
+																<a href="<?=$this->url->get(array("for" => "user", "id" => $order->user->id))?>" target="_blank">
+																	<?=$order->user->getFullName()?>
+																	(<?=$order->user->phone?>)
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td>Стоимость</td>
+															<td><?=number_format($order->amount, 2, ",", " ")?> р.</td>
+														</tr>
+														<tr>
+															<td>Статус</td>
+															<td><?=$order->getStatus()?></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="col-md-8">
+												<form method="post">
+													<table class="table table-striped m-b-none">
+														<thead>
+															<tr>
+																<th>Информация</th>
+																<th>Склад</th>
+																<th>Количество</th>
+																<th>Время&nbsp;доставки</th>
+																<th>Цена</th>
+																<th>Статус</th>
+															</tr>
+														</thead>
+														<tbody>
+															<?foreach( json_decode($order->items) AS $item ):?> 
+															<tr>
+																<td>
+																	<?=$item->article?><br>
+																	<?=$item->brand?><br>
+																	<?=$item->title?>
+																<td><?=$item->stock?></td>
+																<td><?=$item->count?>&nbsp;шт.</td>
+																<td><?=$item->delivery?>&nbsp;дн.</td>
+																<td><?=number_format($item->price, 2, ",", "&nbsp;")?>&nbsp;р.</td>
+																<td>
+																	<select name="orders[<?=$item->code?>][status]">
+																		<?foreach( $order->getItemStatuses() AS $key => $value ):?> 
+																		<option value="<?=$key?>" <?=($key==$item->status?"selected":"")?>><?=$value?></option>
+																		<?endforeach;?> 
+																	</select>
+																</td>
+															</tr>
+															<?endforeach;?> 
+														</tbody>
+													</table>
+													<button type="submit" class="btn btn-primary">Сохранить изменения</button>
+													<input type="hidden" name="action" value="items">
+												</form>
+											</div>
+										</div>
+									</div>
+								</section>
+								<section class="panel panel-default">
+									<header class="panel-heading font-bold">
+										Изменение
+									</header>
+									<div class="panel-body">
+										<form method="post">
+											<div class="form-group">
+												<label for="status" class="col-sm-2 control-label">Статус</label>
+												<div class="col-sm-10">
+													<select class="form-control m-b" name="status" id="status">
+														<?foreach( $order->getStatuses() AS $statusId => $statusName ):?> 
+														<option value="<?=$statusId?>" <?=($statusId==$order->status?'selected="selected"':"")?>><?=$statusName?></option>
+														<?endforeach;?> 
+													</select>
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group">
+												<div class="col-sm-4 col-sm-offset-2">
+													<button type="submit" class="btn btn-primary">Сохранить изменения</button>
+												</div>
+											</div>
+											<input type="hidden" name="action" value="update">
+										</form>
+									</div>
+								</section>
+								<?if( count($anotherOrders) ):?> 
+								<section class="panel panel-default">
+									<header class="panel-heading font-bold">
+										Другие заказы этого клиента
+									</header>
+									<table class="table table-striped m-b-none">
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>Время создания</th>
+												<th>Клиент</th>
+												<th>Количество позиций</th>
+												<th>Стоимость</th>
+												<th>Статус</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?foreach( $anotherOrders AS $order ):?> 
+											<tr>
+												<td>
+													<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+														<?=$order->id?>
+													</a>
+												</td>
+												<td>
+													<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+														<?=$order->getCreatedDateTime()->format("d.m.Y H:i")?>
+													</a>
+												</td>
+												<td>
+													<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+														<?=$order->user->getFullName()?>
+													</a>
+												</td>
+												<td>
+													<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+														<?=count(json_decode($order->items))?>
+													</a>
+												</td>
+												<td>
+													<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+														<?=number_format($order->amount, 2, ",", " ")?> р.
+													</a>
+												</td>
+												<td>
+													<a data-bjax href="<?=$this->url->get(array("for" => "order", "id" => $order->id))?>">
+														<?=$order->getStatus()?>
+													</a>
+												</td>
+											</tr>
+											<?endforeach;?> 
+										</tbody>
+									</table>
+								</section>
+								<?endif;?> 

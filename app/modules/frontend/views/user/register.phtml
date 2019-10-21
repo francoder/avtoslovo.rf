@@ -1,0 +1,104 @@
+		<div class="col-sm-6 col-sm-offset-3">
+			<div class="row">
+				<div class="col-sm-12">
+					<h3>Регистрация</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="register-container">
+						<form method="post">
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="firstName">Имя и Фамилия</label>
+									<?=$form->render("firstName", array("class" => "big", "placeholder" => "Ваше имя"))?>
+									<?=$form->render("lastName", array("class" => "big", "placeholder" => "Ваша фамилия"))?>
+									<?foreach( $form->getMessagesFor("firstName") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="firstName" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<?foreach( $form->getMessagesFor("lastName") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="lastName" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="city">Город</label>
+									<div role="ui.city">
+										<div role="input" class="btn-group full">
+											<input type="text" autocomplete="off" class="big full" placeholder="Ваш город" value="">
+											<ul class="dropdown-menu" role="results"></ul>
+										</div>
+										<div role="selected" class="hide">
+											<span role="city"></span>
+											<a href="#" role="cancel" title="Выбрать другой">&times;</a>
+										</div>
+										<?=$form->render("city", array("class" => "hide value"))?>
+									</div>
+									<?foreach( $form->getMessagesFor("city") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="city" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="phone">Телефон</label>
+									<?=$form->render("phone", array("class" => "big full", "placeholder" => "Ваш Телефон"))?>
+									<?foreach( $form->getMessagesFor("phone") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="phone" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="email">Email</label>
+									<?=$form->render("email", array("class" => "big full", "placeholder" => "Ваш Email"))?>
+									<?foreach( $form->getMessagesFor("email") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="email" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="password">Пароль</label>
+									<?=$form->render("password", array("class" => "big", "placeholder" => "Пароль"))?>
+									<?=$form->render("passwordConfirm", array("class" => "big", "placeholder" => "Еще раз"))?>
+									<?foreach( $form->getMessagesFor("password") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="password" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<?foreach( $form->getMessagesFor("passwordConfirm") AS $message ):?>
+									<div class="clearfix"></div>
+									<label for="passwordConfirm" class="btn-style"><?=$message?></label>
+									<?endforeach;?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<p style=" font-size: 13px;">Нажимая кнопку далее вы принимаете все условия <a target="_blank" href="/oferta.pdf">Договора оферты</a> а также <a  target="_blank" href="/Personaldata.pdf">Согласие на обработку персональных данных</a></p>
+									<div class="clearfix"></div>
+									<button class="big" type="submit">Продолжить</button>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>

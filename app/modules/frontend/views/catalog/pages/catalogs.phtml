@@ -1,0 +1,139 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="search-container">
+            <ul class="nav nav-tabs">
+                <li><a data-toggle="tab" href="#tab1">Номер детали</a></li>
+                <li><a data-toggle="tab" href="#tab3">VIN номер / номер кузова</a></li>
+                <li class="active"><a data-toggle="tab" href="#tab2">Марка</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab1" class="tab-pane fade">
+                    <form action="<?= $this->url->get("catalog/parts") ?>" method="get" role="form">
+                        <p style="margin: 10px 0 0 0;font-size: 13px;color: #686868;">Введите номер детали например : 4L0845099</p>
+                        <input class="big dropdown-toggle full-flex query" 
+                           data-toggle="dropdown" 
+                           value="<?= !empty($query) ? htmlspecialchars($query) : "" ?>" 
+                           placeholder="Номер детали" 
+                           type="text" 
+                           name="query" 
+                           autocomplete="off">
+                        <script type="text/javascript">
+                            var query = $('input.query'),
+                                    fastlink = $('.fastlink');
+
+                            if (query.val().length) {
+                                fastlink.hide();
+                            }
+
+                            query.keyup(function (e) {
+                                fastlink.hide();
+                                console.log($(this).val());
+                                if (e.keyCode == 8) {
+                                    if ($(this).val() == "") {
+                                        fastlink.show();
+                                    }
+                                }
+                            });
+                        </script>
+                        <?php
+                        echo $this->partial("shared/history_list", [
+                            'list' => $partList,
+                            'type' => 'parts',
+                        ])
+                        ?>
+                        <button class="big" type="submit">Найти</button>
+                    </form>
+                    <p style="margin: 10px 0 0 0;font-size: 13px;color: #686868;">Если вы не знаете номера детали, воспользуйтесь каталогом</p>
+                </div>
+                <div id="tab2" class="tab-pane fade in active">
+                    <div class="mark-container">
+                        <?php if(!empty($catalogs)): ?>
+                        <ul>
+                            <?php
+                            $count = count($catalogs->children());
+                            $cols = 5;
+                            $itemsInCol = intval($count / $cols);
+                            $i = 0;
+                            foreach ($catalogs->children() AS $catalog):$i++
+                                ?>
+                                <?php if ($i > $itemsInCol): $i = 0; ?>
+                                </ul>
+                                <ul>
+                                <?php endif; ?>
+                                <li><a data-bjax href="<?= $this->url->get("catalog", array("action" => "catalog", "code" => $catalog->attributes()->code->__toString())) ?>">
+                                        <?php echo $catalog->attributes()["name"] ?>
+                                    </a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                            <?php else: ?>
+                        <ul>
+                            <li>Информация отсутствует</li>
+                        </ul>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div id="tab3" class="tab-pane fade">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p style="margin: 0px 0 10px 0;font-size: 13px;color: #686868;">Для поиска по VIN введите его ниже например: WAUBH54B11N111054</p>
+                            <form class="" action="<?php echo $this->url->get("catalog") ?>" method="get" role="form">
+                                <input type="hidden" name="action" value="vin">
+                                <div class="histories">
+                                    <input class="big full query dropdown-toggle" 
+                                           data-toggle="dropdown"
+                                           type="text" 
+                                           name="vin" 
+                                           id="vin" 
+                                           placeholder="VIN номер">
+                                           <?php
+                                           echo $this->partial("shared/history_list", [
+                                               'list' => $vinList,
+                                               'type' => 'vin',
+                                           ])
+                                           ?>
+                                </div>
+                                <div class="clearfix"></div>
+                                <button class="big full" type="submit">Найти</button>
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form class="" action="<?php echo $this->url->get("catalog") ?>" method="get" role="form">
+                                <input type="hidden" name="action" value="frame">
+                                <p style="margin: 0px 0 10px 0;font-size: 13px;color: #686868;">Для поиска по номеру кузову укажите его ниже например: FNN15-502358</p>
+                                <div class="histories histories-flex">
+                                    <input class="big query dropdown-toggle" 
+                                           type="text" 
+                                           data-toggle="dropdown"
+                                           placeholder="Марка кузова"
+                                           name="frame" 
+                                           id="frame"                                            
+                                           minlength="3"
+                                           required                                           
+                                           value="<?php isset($frame) ? $frame : null ?>">
+                                    &#95;
+                                    <input class="big query" 
+                                           type="text" 
+                                           data-toggle="dropdown"
+                                           placeholder="Номер кузова" 
+                                           name="frame-number"
+                                           id="frame-number" 
+                                           minlength="6"
+                                           required
+                                           value="<?php isset($frameNumber) ? $frameNumber : null ?>">
+                                           <?php
+                                           echo $this->partial("shared/history_list", [
+                                               'list' => $frameList,
+                                               'type' => 'frame',
+                                           ])
+                                           ?>
+                                </div>
+                                <div class="clearfix"></div>
+                                <button class="big full" type="submit">Найти</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

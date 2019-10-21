@@ -1,0 +1,50 @@
+									<div class="row">
+										<div class="col-sm-12">
+											<p>Выберите комплектацию</p>
+											<div class="table-container">
+												<table class="model-select">
+													<thead>
+														<tr>
+															<td style="widtd: 50px;">Номер</td>
+															<td>Название</td>
+															<td>Дополнительная информация</td>
+														</tr>
+													</thead>
+													<tbody>
+														<?foreach( $model->children() AS $variant ):
+															$variantOptions = array();
+															foreach( $variant->children() AS $option )
+																$variantOptions[$option->attributes()["key"]->__toString()] = $option->attributes()["value"]->__toString();
+															
+															switch( true ) {
+																case isset($variantOptions["market"]):
+																	$market = $variantOptions["market"];
+																	break;
+																case isset($variantOptions["destinationregion"]):
+																	$market = $variantOptions["destinationregion"];
+																	break;
+																default:
+																	$market = "";
+																	break;
+															}
+															?>
+														<tr onclick="document.location = '<?=$this->url->get("catalog", array(
+															"action" => $newxtaction,
+															"code" => $catalogCode,
+															"vid" => $variant->attributes()["vehicleid"]->__toString(),
+															"ssd" => $variant->attributes()["ssd"]->__toString(),
+															))?>';">
+															<td><?=$variant->attributes()["vehicleid"]?></td>
+															<td><?=$variant->attributes()["name"]?></td>
+															<td>
+                                                                <?php foreach ($variant->attribute AS $attr): ?>
+                                                                    <?= $attr['value']->__toString()?>
+                                                                <?php endforeach; ?>
+                                                            </td>
+														</tr>
+														<?endforeach;?>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>

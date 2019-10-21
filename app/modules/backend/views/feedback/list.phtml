@@ -1,0 +1,94 @@
+<section class="panel panel-default">
+    <header class="panel-heading">
+        Обратная связь
+    </header>
+    <!-- <div class="row wrapper">
+            <div class="col-sm-5 m-b-xs" role="bulk">
+                    <select class="input-sm form-control input-s-sm inline v-middle">
+                            <option value="0">Массовое действие</option>
+                            <option value="1">Удалить выбранные</option>
+                    </select>
+                    <button class="btn btn-sm btn-default" type="submit">Применить</button>
+            </div>
+            <div class="col-sm-4 m-b-xs"></div>
+            <div class="col-sm-3">
+                    <div class="input-group">
+                            <input class="input-sm form-control" placeholder="Поиск" type="text">
+                            <span class="input-group-btn">
+                                    <button class="btn btn-sm btn-default" type="button">Go!</button>
+                            </span>
+                    </div>
+            </div>
+    </div> -->
+    <div class="table-responsive">
+        <table class="table table-striped b-t b-light">
+            <thead>
+                <tr>
+                    <th style="width: 140px;">
+                        ID<br>
+                        Дата
+                    </th>
+                    <th style="width: 200px;">
+                        Имя<br>
+                        Телефон
+                    </th>
+                    <th>Комментарий</th>
+                    <th>Примечание</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?foreach( $feedbackPage->items AS $feedback ):?> 
+                <tr>
+                    <td>
+                        <?= $feedback->id ?><br>
+                        <?= $feedback->getCreatedDateTime()->format("d.m.Y H:i") ?>
+                    </td>
+                    <td>
+                        <?= $feedback->name ?><br>
+                        <?= $feedback->phone ?><br>
+                        <?= $feedback->email ?>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <textarea name="note" class="form-control m-b" readonly style="width: 100%;"><?= $feedback->comment ?></textarea>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="id" value="<?= $feedback->id ?>">
+                            <input type="hidden" name="action" value="note">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <textarea name="note" class="form-control m-b" style="width: 100%;"><?= $feedback->note ?></textarea>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="submit" class="btn btn-default btn-lg">Обновить</button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                <?endforeach;?> 
+            </tbody>
+        </table>
+    </div>
+    <footer class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 hidden-xs" role="bulk">
+                    <!-- <select class="input-sm form-control input-s-sm inline v-middle">
+                            <option value="0">Массовое действие</option>
+                            <option value="1">Удалить выбранные</option>
+                    </select>
+                    <button class="btn btn-sm btn-default" type="submit">Применить</button> -->
+            </div>
+            <div class="col-sm-4 text-center">
+                <small class="text-muted inline m-t-sm m-b-sm">Показано <?= ($feedbackPage->current - 1) * $feedbackPage->limit + 1 ?>-<?= (($feedbackPage->current - 1) * $feedbackPage->limit) + count($feedbackPage->items) ?> из <?= $feedbackPage->total_items ?> обращений</small>
+            </div>
+            <div class="col-sm-4 text-right text-center-xs">
+                <?$this->partial("shared/navigation",array("page" => $feedbackPage, "base" => "users"))?> 
+            </div>
+        </div>
+    </footer>
+</section>

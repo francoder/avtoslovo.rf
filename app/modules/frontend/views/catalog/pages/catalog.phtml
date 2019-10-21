@@ -1,0 +1,152 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="search-container">
+            <ul class="nav nav-tabs">
+                <li><a data-toggle="tab" href="#tab1">Номер детали</a></li>
+                <li class="active"><a data-toggle="tab" href="#tab3">VIN номер / номер кузова</a></li>
+                <li><a data-toggle="tab" href="#tab2">Марка</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab1" class="tab-pane fade">
+                    <form action="<?= $this->url->get("catalog/parts") ?>" method="get" role="form">
+                        <p style="margin: 10px 0 0 0;font-size: 13px;color: #686868;">Введите номер детали например : 4L0845099</p>
+                        <input style="min-width: calc(100% - 70px);" class="big" placeholder="Номер запчасти" type="text" name="query" id="query" value="">
+                        <button class="big" type="submit">Найти</button>
+                    </form>
+                    <p style="margin: 10px 0 0 0;font-size: 13px;color: #686868;">Если вы не знаете номера детали, воспользуйтесь каталогом</p>
+                </div>
+                <div id="tab2" class="tab-pane fade">
+                    <div class="mark-container">
+                        <ul>
+                            <?php
+                            $count = count($catalogs->children());
+                            $cols = 5;
+                            $itemsInCol = intval($count / $cols);
+                            $i = 0;
+                            foreach ($catalogs->children() AS $catalogItem):$i++
+                                ?>
+                                <?php if ($i > $itemsInCol): $i = 0; ?>
+                                </ul>
+                                <ul>
+                                <?php endif; ?>
+                                <li>
+                                    <a data-bjax href="<?= $this->url->get("catalog", array("action" => "catalog", "code" => $catalogItem->attributes()->code->__toString())) ?>">
+                                        <?= $catalogItem->attributes()["name"] ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                <div id="tab3" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p style="margin: 0px 0 10px 0;font-size: 13px;color: #686868;">Для поиска по VIN введите его ниже например: WAUBH54B11N111054</p>
+                            <form class="" action="<?= $this->url->get("catalog") ?>" method="get" role="form">
+                                <input type="hidden" name="action" value="vin">
+                                <input class="big full" type="text" name="vin" id="vin" placeholder="VIN номер">
+                                <div class="clearfix"></div>
+                                <button class="big full" type="submit">Найти</button>
+                            </form>
+                        </div>
+                        <div class="col-sm-6">
+                            <form class="" action="<?= $this->url->get("catalog") ?>" method="get" role="form">
+                                <input type="hidden" name="action" value="frame">
+                                <p style="margin: 0px 0 10px 0;font-size: 13px;color: #686868;">Для поиска по номеру кузову укажите его ниже например: FNN15-502358</p>
+                                <div class="histories histories-flex">
+                                    <input class="big query dropdown-toggle" 
+                                           type="text" 
+                                           data-toggle="dropdown"
+                                           placeholder="Марка кузова"
+                                           name="frame" 
+                                           id="frame-code" 
+                                           minlength="3"
+                                           required
+                                           value="">
+                                    &#95;
+                                    <input class="big query" 
+                                           type="text" 
+                                           data-toggle="dropdown"
+                                           placeholder="Номер кузова" 
+                                           name="frame-number" 
+                                           id="frame-number" 
+                                           minlength="6"
+                                           required
+                                           value="<?php isset($frameNumber) ? $frameNumber : null ?>"
+                                           >
+                                           <?php
+                                           echo $this->partial("shared/history_list", [
+                                               'list' => $frameList,
+                                               'type' => 'frame',
+                                           ])
+                                           ?>
+                                </div>
+                                <div class="clearfix"></div>
+                                <button class="big full" type="submit">Найти</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if ($catalog): ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <?php if($this->auth->isAuthorized()): ?>
+            <?php
+                echo $this->partial("shared/history_list", [
+                    'list' => $vinListLastFive
+                ])
+            ?>
+            <?php endif; ?>
+            <section class="panel panel-default">
+                <header class="panel-heading">
+                    Выберите модель
+                </header>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <?php foreach ($catalog->children() AS $selector): ?>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><?= $selector->attributes()["name"] ?></label>
+                                <div class="col-sm-10">
+                                    <?php if (!empty($selector->options->children())): ?>
+                                        <select class="chosen-select"
+                                                data-placeholder="Select Your Options"
+                                                data-base="<?= $this->url->get("catalog", array("action" => "catalog", "code" => $catalogCode)) ?>" onchange="console.log(this.dataset.base, this.value, window.location.href = this.dataset.base + '&ssd=' + this.value);window.location.href = this.dataset.base + '&ssd=' + this.value">
+                                            <option value="">Не выбрано</option>
+                                            <?php foreach ($selector->options->children() AS $option): ?>
+                                                <option value="<?= $option->attributes()["key"] ?>"><?= $option->attributes()["value"] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    <?php else: ?>
+                                        <div class="col-sm-4">
+                                            <p class="form-control-static"><?= $selector->attributes()["value"] ?></p>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <button class="btn btn-primary" onclick="window.location.href = '<?= $this->url->get("catalog", array("action" => "catalog", "code" => $catalogCode, "ssd" => $selector->attributes()["ssd"]->__toString())) ?>'" type="button">Отменить</button>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg pull-in"></div>
+                        <?php endforeach; ?>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="button" onclick="window.location.href = '<?= $this->url->get("catalog", array("action" => "model", "code" => $catalogCode, "ssd" => $ssd)) ?>'">Продолжить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('.chosen-select').chosen({
+            no_results_text: "Не найдено",
+            width: "100%"
+        });
+
+    </script>
+<?php endif; ?>

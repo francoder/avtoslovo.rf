@@ -1,0 +1,56 @@
+			<aside class="bg-black aside-md hidden-print hidden-xs" id="nav">
+				<section class="vbox">
+					<section class="w-f scrollable">
+						<div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="10px" data-railOpacity="0.2" data-wheelStep="240">
+							<div class="clearfix wrapper dk nav-user hidden-xs">
+								<div class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										<span class="thumb avatar pull-left m-r">
+											<img src="<?=$this->url->get("assets/images/no-avatar.jpg")?>" class="dker" alt="...">
+											<i class="on md b-black"></i>
+										</span>
+										<span class="hidden-nav-xs clear">
+											<span class="block m-t-xs">
+												<strong class="font-bold text-lt"><?=$this->auth->getCurrent()->getFullName(".")?> </strong>
+												<b class="caret"></b>
+											</span>
+											<span class="text-muted text-xs block"><?=$this->auth->getCurrent()->group->title?></span>
+										</span>
+									</a>
+									<ul class="dropdown-menu animated fadeInRight m-t-xs">
+										<?$this->partial("shared/userMenu")?> 
+									</ul>
+								</div>
+							</div>
+							<!-- nav -->
+							<nav class="nav-primary hidden-xs">
+								<div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
+								<ul class="nav nav-main" data-ride="collapse">
+									<?foreach( $this->menu->getMenu() AS $menuItem ):?> 
+									<?if( $menuItem->type == "item" ):?> 
+									<li class="<?=($menuItem->current?"active":"")?>">
+										<a href="<?=$menuItem->link?>">
+											<i class="i <?=(isset($menuItem->icon)?$menuItem->icon:"i-dot")?> icon"></i>
+											<span class="font-bold"><?=$menuItem->title?></span>
+										</a>
+									</li>
+									<?elseif( $menuItem->type == "group" ):?> 
+									<?$this->partial("shared/menuGroup")?> 
+									<?endif;?> 
+									<?endforeach;?> 
+								</ul>
+							</nav>
+							<!-- / nav -->
+						</div>
+					</section>
+					<footer class="footer hidden-xs no-padder text-center-nav-xs">
+						<a href="<?=$this->url->get("logout")?>" class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
+							<i class="i i-logout"></i>
+						</a>
+						<a href="#nav" id="nav-xs-link" data-toggle="class:nav-xs" class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
+							<i class="i i-circleleft text"></i>
+							<i class="i i-circleright text-active"></i>
+						</a>
+					</footer>
+				</section>
+			</aside>

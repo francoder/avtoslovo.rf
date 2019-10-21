@@ -1,0 +1,23 @@
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>История баланса</h3>
+			</div>
+			<table class="table table-striped m-b-none">
+				<thead>
+					<tr>
+						<td>Время</td>
+						<td>Сумма</td>
+						<td>Комментарий</td>
+					</tr>
+				</thead>
+				<tbody>
+					<?foreach( $balanceOperations AS $operation ):?> 
+					<tr>
+						<td><?=$operation->getCreatedDateTime()->format("d.m.Y H:i")?></td>
+						<td><?=number_format($operation->amount, 2, ",", "&nbsp;")?>р.</td>
+						<td><?=$operation->comment?></td>
+					</tr>
+					<?endforeach;?> 
+				</tbody>
+			</table>
+		</div>

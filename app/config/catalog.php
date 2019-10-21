@@ -1,0 +1,67 @@
+<?php
+return new \Phalcon\Config(array(
+	array(
+		"title" => "Автотрейд",
+		"login" => "aareg99@mail.ru",
+		"password" => ",fhyfek",
+		"key" => "729c1cf8976ab98203ed4eb873fcc8d7",
+		"type" => "autotrade",
+		"class" => "autotrade",
+	),
+	array(
+		"title" => "TMParts",
+		"login" => "ПЛ00009544",
+		"password" => "MtwCG/9d4",
+		"key" => "cAIbBnk4azOA3B_V1d6-HdCyaGfULOkxsYS6IIEz4cW1JkiQTb391J4wUGSnWwIUJhcvRie_JFCqdBQaHBE_y_CtpUqkozuXQHp5qFTox0wxXPmUX-0ZX09gLjSO9TZLt6ruwvVTilRiLuyU7o0amH00yQg_NFBGsQB_caJfxs36fR58o8CAVx3c7rmA2qojZL2bkloGCpfZWDMN6rczohPJVdaLw85_tAcRXYsSSCFC6-b2RbBDoiYmnbFsJTLOsTy6NOENB2wo_J2PjNygF2HPZMuqbFdp665bYjLH8SsHsEs7dzwbCYejfHO_n7spQsvTCvOVjZmaRemzShOzrzYQPoDI9KRiyIT6Td8UHBsqMMhy9XxvN44n-2yqQxZCsRqK5_tIxf2UQELvFrAUNyGfZVx_MTbNerwYAwMkAJFuToEIC04zS7lx_qxMnfbCJCIlWwtWi4WJiOmZBZITLQoL5dSqnOTEeiL2QMqThRwW42fP7MGo7N4-CjICUuer",
+		"type" => "tmparts",
+		"class" => "tmparts",
+	),
+	array(
+		"title" => "АвтоЛев",
+		"login" => "aareg99@mail.ru",
+		"password" => ",fhyfek",
+		"type" => "abcp",
+		"class" => "abcp",
+	),
+	array(
+		"title" => "Emex",
+		"login" => "881547",
+		"password" => ",fhyfek",
+		"type" => "emex",
+		"class" => "emex",
+	),
+	array(
+		"title" => "Армтек",
+		"login" => "AAREG99@MAIL.RU",
+		"password" => ",fhyfek212",
+		"type" => "armtek",
+		"class" => "armtek",
+	),
+	array(
+		"title" => "Росско",
+		"key1" => "541026574ed5d1be04831e6464539388",
+		"key2" => "cbfa21a9a7082210e526a8a7f717d808",
+		"type" => "rossko",
+		"class" => "rossko",
+	),
+	array(
+		"title" => "Uniqom",
+		"login" => "carexbrn@mail.ru",
+		"password" => "nmbxrt",
+		"type" => "uniqom",
+		"class" => "uniqom",
+	),
+	array(
+		"title" => "Berg",
+		"key" => "3209ad6ba90893326c29970516395f465e0cf82012ca0bdf92657059dbf9c4b4",
+		"type" => "berg",
+		"class" => "berg",
+	),
+	array(
+		"title" => "Autopiter",
+		"login" => "260474",
+		"password" => "G7gG2LTw8",
+		"type" => "autopiter",
+		"class" => "autopiter",
+	),
+));

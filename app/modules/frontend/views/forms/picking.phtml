@@ -1,0 +1,48 @@
+<div class="modal fade" id="picking" tabindex="-1" role="dialog" aria-labelledby="picking" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 style="text-align:center;">Помощь в подборе</h4>
+                <div>
+                    <p><strong>Не тратьте время на детальное изучение каталогов: даже если вам известен номер нужной детали, от ошибки не застрахован никто.</strong></p>
+                    <p>Наши специалисты по подбору помогут вам найти именно ту запчасть, которая требуется вашему автомобилю.</p>
+                </div>
+                <div class="clearfix"></div>
+                <form role="picking" method="post">
+                    <div class="form-group">
+                        <div class="form-field">
+                            <input class="big full" name="name" placeholder="Ваше имя *" type="text">
+                        </div>
+                        <div class="form-field">
+                            <input class="big full" name="phone" placeholder="Телефон *" required="" type="tel">
+                            <span class="request-hint">&nbsp;— для уточняющих вопросов</span>
+                        </div>
+                        <div class="form-field">
+                            <input class="big full" placeholder="Эл. почта" name="email" type="email">
+                            <span class="request-hint">&nbsp;— вышлем список подходящих автозапчастей</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form__label" for="request-car-brand">Автомобиль</label>
+                        <div class="form-group-block">
+                            <input class="" placeholder="Марка" name="brand" type="text">
+                            <input class="" placeholder="Модель" name="model" type="text">
+                            <input class="" placeholder="Год" maxlength="4" pattern="\d*" name="year" type="text">
+                        </div>
+                        <label class="form__label" for="request-car-brand">Или VIN</label>
+                        <div class="form-field">
+                            <input class="full-width" placeholder="VIN" name="vin" type="text">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="form__label" for="request-parts">Нужные запчасти (через запятую)</label>
+                        <textarea class="full-width" name="staff"></textarea>
+                        <p>* — обязательные для заполнения поля</p>
+                    </div>
+                    <button class="big full" type="submit">Отправить</button>
+                    <p style=" font-size:  13px; padding: 20px 0 0 0;">Нажимая кнопку отправить вы принимаете <a  target="_blank" href="/Personaldata.pdf">Согласие на обработку персональных данных</a></p>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

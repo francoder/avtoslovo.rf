@@ -1,0 +1,117 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h3>Мои заказы</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <?if( count($orders) ):?> 
+        <?php
+        $list = array();
+        foreach ($orders AS $order):
+            foreach (json_decode($order->items) AS $item):
+                $list[] = array(
+                    'orderId' => $order->id,
+                    'brand' => $item->brand,
+                    'article' => $item->article,
+                    'title' => $item->title,
+                    'count' => $item->count,
+                    'price' => number_format($item->price, 0, ",", "&nbsp;"),
+                    'sum' =>number_format($item->price * $item->count, 0, ",", "&nbsp;") ,
+                    'statusItemCode' => $item->status,
+                    'statusOrderCode' => $order->status,
+                    'orderStatus' => $order->getStatuses()[$order->status],
+                    'itemStatus' => $order->getItemStatuses()[$item->status],
+                    'createdDate' => $order->createdAt,
+                    'delivery' => $item->delivery ?
+                    $order->getCreatedDateTime()->modify("+ " . $item->delivery . " days")->format("d.m.Y") : 'В наличии'
+                );
+            endforeach;
+        endforeach;
+                
+        usort($list, function($a, $b) {
+            if ($a['statusItemCode'] == $b['statusItemCode']) {
+                return $a['createdDate'] < $b['createdDate'];
+            }
+
+            return $a['statusItemCode'] > $b['statusItemCode'];
+        });
+        
+        ?> 
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <td>Дата заказа</td>
+                        <td>Производитель</td>
+                        <td>Название</td>
+                        <td>Количество</td>
+                        <td>Цена</td>
+                        <td>Итого</td>
+                        <td>Ожидается</td>
+                        <td colspan="2" align="center">Статус</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php /* foreach( $orders AS $order ):?> 
+                    <?foreach( json_decode($order->items) AS $item ):?> 
+                    <tr>
+                        <td><?= $item->brand ?></td>
+                        <td><?= $item->title ?></td>
+                        <td><?= $item->count ?>&nbsp;шт.</td>
+                        <td><?= number_format($item->price, 0, ",", "&nbsp;") ?>&nbsp;р.</td>
+                        <td><?= $order->getItemStatuses()[$item->status] ?></td>
+                        <td>
+                            <?if( $item->delivery ):?> 
+                            <?= $order->getCreatedDateTime()->modify("+ " . $item->delivery . " days")->format("d.m.Y") ?>
+                            <?else:?> 
+                            В наличии
+                            <?endif;?> 
+                        </td>
+                    </tr>
+                    <?endforeach;?> 
+                    <?endforeach; */ ?>
+                <?php foreach ($list as $item): ?>
+                    <tr>
+                        <td><?= $item['createdDate'] ?></td>
+                        <td><?= $item['brand'] ?>
+                            <br>
+                            <strong><?= $item['article'] ?></strong>
+                        </td>
+                        <td><?= $item['title'] ?></td>
+                        <td><?= $item['count'] ?> шт.</td>
+                        <td><?= $item['price'] ?> руб.</td>
+                        <td><?= $item['sum'] ?> руб.</td>
+                        <td><?= $item['delivery'] ?></td>
+                        <td><?= $item['orderStatus'] ?></td>
+                        <?php if($item['statusItemCode'] == 1 && $item['statusOrderCode'] != 10) : ?>
+                         <form action="<?=$this->url->get("cart/createOrder")?>" method="post">
+                             <td>
+                                <input type="hidden" name="orderId" value="<?= $item['orderId'] ?>">
+                                <button type="submit" class="btn btn-sm">Оплатить заказ</button>
+                            </td>
+                            </form>
+                        <?php elseif($item['statusItemCode'] == 1 && $item['statusOrderCode'] == 10): ?>
+                            <form action="<?=$this->url->get("cart/createOrder")?>" method="post">
+                                <td>
+                                    <input type="hidden" name="orderId" value="<?= $item['orderId'] ?>">
+                                    <button type="submit" disabled="disabled" class="btn btn-sm">Оплатить заказ</button>
+                                </td>
+                            </form>
+                        <?php elseif($item['statusOrderCode'] == 9): ?>
+                            <td></td>
+                        <?php else: ?>
+                        <td><?= $item['itemStatus'] ?></td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?else:?> 
+        <div class="empty">
+            <p>Вы ещё не соврешали заказов</p>
+        </div>
+        <?endif;?> 
+    </div>
+</div>

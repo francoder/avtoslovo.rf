@@ -1,0 +1,198 @@
+								<section class="panel panel-default">
+									<header class="panel-heading font-bold">
+										Пользователь #<?=$editUser->id?> &mdash; Данные
+									</header>
+									<div class="panel-body">
+										<form class="form-horizontal" method="post">
+											<div class="form-group <?=(($form->hasMessagesFor("firstName")OR$form->hasMessagesFor("lastName"))?"has-error":"")?>">
+												<label for="firstName" class="col-sm-2 control-label">Имя</label>
+												<div class="col-sm-10">
+													<div class="row">
+														<div class="col-md-3">
+															<?=$form->render("firstName", array("class" => "form-control", "placeholder" => "Имя"))?> 
+														</div>
+														<div class="col-md-3">
+															<?=$form->render("lastName", array("class" => "form-control", "placeholder" => "Фамилия"))?> 
+														</div>
+													</div>
+													<?foreach( $form->getMessagesFor("firstName") AS $message ):?> 
+													<label for="firstName"><?=$message?></label>
+													<?endforeach;?> 
+													<?foreach( $form->getMessagesFor("lastName") AS $message ):?> 
+													<label for="lastName" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group <?=($form->hasMessagesFor("city")?"has-error":"")?>">
+												<label for="city" class="col-sm-2 control-label">Город</label>
+												<div class="col-sm-10">
+													<div role="ui.city">
+														<div role="input" class="btn-group">
+															<input type="text" class="form-control" placeholder="Город" value="">
+															<ul class="dropdown-menu" role="results"></ul>
+														</div>
+														<div role="selected" class="hide form-control-static">
+															<span role="city"></span>
+															<a href="#" role="cancel" title="Выбрать другой">&times;</a>
+														</div>
+														<?=$form->render("city", array("class" => "hide value"))?>
+													</div>
+													<?foreach( $form->getMessagesFor("city") AS $message ):?> 
+													<label for="city" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group <?=($form->hasMessagesFor("phone")?"has-error":"")?>">
+												<label for="phone" class="col-sm-2 control-label">Телефон</label>
+												<div class="col-sm-10">
+													<?=$form->render("phone", array("class" => "form-control", "placeholder" => "Телефон"))?> 
+													<?foreach( $form->getMessagesFor("phone") AS $message ):?> 
+													<label for="phone" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group <?=($form->hasMessagesFor("email")?"has-error":"")?>">
+												<label for="email" class="col-sm-2 control-label">Email</label>
+												<div class="col-sm-10">
+													<?=$form->render("email", array("class" => "form-control", "placeholder" => "Email"))?> 
+													<?foreach( $form->getMessagesFor("email") AS $message ):?> 
+													<label for="phone" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group <?=($form->hasMessagesFor("groupId")?"has-error":"")?>">
+												<label for="groupId" class="col-sm-2 control-label">Группа</label>
+												<div class="col-sm-10">
+													<?=$form->render("groupId", array("class" => "form-control m-b"))?> 
+													<?foreach( $form->getMessagesFor("groupId") AS $message ):?> 
+													<label for="phone" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group">
+												<div class="col-sm-4 col-sm-offset-2">
+													<button type="submit" class="btn btn-primary">Сохранить изменения</button>
+												</div>
+											</div>
+											<input type="hidden" name="action" value="data">
+										</form>
+									</div>
+								</section>
+								
+								<section class="panel panel-default">
+									<header class="panel-heading font-bold">
+										Пользователь #<?=$editUser->id?> &mdash; Пароль
+									</header>
+									<div class="panel-body">
+										<form class="form-horizontal" method="post">
+											<div class="form-group <?=(($form2->hasMessagesFor("password")OR$form2->hasMessagesFor("passwordConfirm"))?"has-error":"")?>">
+												<label for="password" class="col-sm-2 control-label">Новый пароль</label>
+												<div class="col-sm-10">
+													<div class="row">
+														<div class="col-md-3">
+															<?=$form2->render("password", array("class" => "form-control", "placeholder" => "Новый пароль"))?> 
+														</div>
+														<div class="col-md-3">
+															<?=$form2->render("passwordConfirm", array("class" => "form-control", "placeholder" => "Ещё раз"))?> 
+														</div>
+													</div>
+													<?foreach( $form2->getMessagesFor("password") AS $message ):?> 
+													<label for="passwordConfirm" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+													<?foreach( $form2->getMessagesFor("passwordConfirm") AS $message ):?> 
+													<label for="passwordConfirm" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group">
+												<div class="col-sm-4 col-sm-offset-2">
+													<button type="submit" class="btn btn-primary">Изменить пароль</button>
+												</div>
+											</div>
+											<input type="hidden" name="action" value="password">
+										</form>
+									</div>
+								</section>
+								
+								<section class="panel panel-default">
+									<header class="panel-heading font-bold">
+										Баланс &mdash; <?=number_format($editUser->getBalance(), 2, ",", "&nbsp;")?>р.
+									</header>
+									<div class="panel-body">
+										<form class="form-horizontal" method="post">
+											<div class="form-group">
+												<label for="type" class="col-sm-2 control-label">Тип</label>
+												<div class="col-sm-10">
+													<?=$form3->render("type", array("class" => "form-control", "placeholder" => "Тип операции"))?> 
+													<?foreach( $form3->getMessagesFor("type") AS $message ):?> 
+													<label for="passwordConfirm" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group">
+												<label for="amount" class="col-sm-2 control-label">Сумма</label>
+												<div class="col-sm-10">
+													<?=$form3->render("amount", array("class" => "form-control", "placeholder" => "Сумма операции"))?> 
+													<?foreach( $form3->getMessagesFor("amount") AS $message ):?> 
+													<label for="passwordConfirm" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group">
+												<label for="comment" class="col-sm-2 control-label">Комментарий</label>
+												<div class="col-sm-10">
+													<?=$form3->render("comment", array("class" => "form-control", "placeholder" => "Комментарий"))?> 
+													<?foreach( $form3->getMessagesFor("comment") AS $message ):?> 
+													<label for="passwordConfirm" class="help-block m-b-none"><?=$message?></label>
+													<?endforeach;?> 
+												</div>
+											</div>
+											<div class="line line-dashed b-b line-lg pull-in"></div>
+											<div class="form-group">
+												<div class="col-sm-4 col-sm-offset-2">
+													<button type="submit" class="btn btn-primary">Добавить операцию</button>
+												</div>
+											</div>
+											<input type="hidden" name="action" value="balance">
+										</form>
+									</div>
+								</section>
+								<section class="panel panel-default">
+									<header class="panel-heading font-bold">
+										История баланса
+									</header>
+									<div class="panel-body">
+										<table class="table table-striped b-t b-light">
+											<thead>
+												<tr>
+													<th>Время</th>
+													<th></th>
+													<th>Комментарий</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?if( !empty($balanceOperations) ):?> 
+												<?foreach( $balanceOperations AS $operation ):?> 
+												<tr>
+													<td><?=$operation->getCreatedDateTime()->format("d.m.Y H:i")?></td>
+													<td><?=number_format($operation->amount, 2, ",", "&nbsp;")?>р.</td>
+													<td><?=$operation->comment?></td>
+												</tr>
+												<?endforeach;?> 
+												<?else:?> 
+												<tr>
+													<td colspan="3">Нет операций</td>
+												</tr>
+												<?endif;?> 
+											</tbody>
+										</table>
+									</div>
+								</section>

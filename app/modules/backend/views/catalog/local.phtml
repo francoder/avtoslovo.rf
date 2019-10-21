@@ -1,0 +1,215 @@
+<?
+$this->assets
+->collection("footer")
+->addJs("assets/js/catalogItemsList.js");
+?> 
+<section class="panel panel-default">
+    <header class="panel-heading">
+        Товары
+    </header>
+    <div class="row wrapper">
+        <div class="col-sm-5 m-b-xs" role="bulk">
+            <select class="input-sm form-control input-s-sm inline v-middle">
+                <option value="0">Массовое действие</option>
+                <option value="1">Удалить выбранные</option>
+            </select>
+            <button class="btn btn-sm btn-default" type="submit">Применить</button>
+            <button class="btn btn-sm btn-default" data-toggle="modal" href="#importModal" type="button">Импорт</button>
+        </div>
+        <div class="col-sm-4 m-b-xs">
+            <form action="<?= $this->url->get("catalog/local") ?>" method="get">
+                <?if( $searchQuery != "" ):?> 
+                <input type="hidden" name="query" value="<?= $searchQuery ?>">
+                <?endif;?> 
+                <select class="input-sm form-control input-s-sm inline v-middle" name="supplier">
+                    <option value="">Все поставщики</option>
+                    <?foreach( $suppliers AS $supplier ):?> 
+                    <option value="<?= $supplier->code ?>" <?= ($currentSupplier == $supplier->code ? "selected" : "") ?>><?= $supplier->title ?></option>
+                    <?endforeach;?> 
+                </select>
+                <button class="btn btn-sm btn-default" type="submit">Выбрать</button>
+            </form>
+        </div>
+        <div class="col-sm-3">
+            <form class="input-group" action="<?= $this->url->get("catalog/local") ?>" method="get">
+                <?if( $currentSupplier != "" ):?> 
+                <input type="hidden" name="supplier" value="<?= $currentSupplier ?>">
+                <?endif;?> 
+                <input class="input-sm form-control" placeholder="Поиск по OEM\Названию" value="<?= htmlspecialchars($searchQuery) ?>" name="query" type="text">
+                <span class="input-group-btn">
+                    <button class="btn btn-sm btn-default" type="submit">Go!</button>
+                </span>
+            </form>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <form method="post" role="bulkForm">
+            <table class="table table-striped b-t b-light">
+                <thead>
+                    <tr>
+                        <th width="20">
+                            <label class="checkbox m-l m-t-none m-b-none i-checks">
+                                <input type="checkbox"><i></i>
+                            </label>
+                        </th>
+                        <th>Поставщик</th>
+                        <th>Кросс-номер</th>
+                        <th>OEM</th>
+                        <th>Бренд</th>
+                        <th>Название</th>
+                        <th>Остаток</th>
+                        <th>Цена</th>
+                        <th>Время доставки</th>
+                        <th>Дата прайса</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?foreach( $itemsPage->items AS $item ):?> 
+                    <tr>
+                        <td>
+                            <label class="checkbox m-l m-t-none m-b-none i-checks">
+                                <input name="bulk[]" value="<?= $item->id ?>" type="checkbox"><i></i>
+                            </label>
+                        </td>
+                        <td>
+                            <?= $item->supplierConfig->title ?>
+                        </td>
+                        <td>
+                            <?= str_replace (",", ", ", $item->externalId) ?>
+                        </td>
+                        <td>
+                            <?= $item->oem ?>
+                        </td>
+                        <td>
+                            <?= $item->brand ?>
+                        </td>
+                        <td>
+                            <?= $item->title ?>
+                        </td>
+                        <td>
+                            <?= number_format($item->count, 0, ",", "&nbsp;") ?>&nbsp;шт.
+                        </td>
+                        <td>
+                            <span
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                data-original-title="Закупочная цена: <?= number_format($item->price, 2, ",", "&nbsp;") ?>&nbsp;р.">
+                                <?= number_format($item->supplierConfig->markup($item->price), 2, ",", "&nbsp;") ?>&nbsp;р.
+                            </span>
+                        </td>
+                        <td>
+                            <?if( $item->supplierConfig->delivery > 0 ):?> 
+                            <?= $item->supplierConfig->delivery ?>&nbsp;дн.
+                            <?else:?> 
+                            В&nbsp;наличии
+                            <?endif;?> 
+                        </td>
+                        <td>
+                            <?= $item->date ?>
+                        </td>
+                    </tr>
+                    <?endforeach;?> 
+                </tbody>
+            </table>
+            <input type="hidden" name="bulkAction" value="0">
+        </form>
+    </div>
+    <footer class="panel-footer">
+        <div class="row">
+            <div class="col-sm-4 hidden-xs" role="bulk">
+                <select class="input-sm form-control input-s-sm inline v-middle">
+                    <option value="0">Массовое действие</option>
+                    <option value="1">Удалить выбранные</option>
+                </select>
+                <button class="btn btn-sm btn-default" type="submit">Применить</button>
+                <button class="btn btn-sm btn-default" data-toggle="modal" href="#importModal" type="button">Импорт</button>
+            </div>
+            <div class="col-sm-4 text-center">
+                <small class="text-muted inline m-t-sm m-b-sm">Показано <?= ($itemsPage->current - 1) * $itemsPage->limit + 1 ?>-<?= (($itemsPage->current - 1) * $itemsPage->limit) + count($itemsPage->items) ?> из <?= $itemsPage->total_items ?> товаров</small>
+            </div>
+            <div class="col-sm-4 text-right text-center-xs">
+                <?
+                $params = array();
+
+                if( $searchQuery != "" ) $params["query"] = $searchQuery;
+                if( $currentSupplier != "" ) $params["supplier"] = $currentSupplier;
+
+                $this->partial("shared/navigation",array("page" => $itemsPage, "base" => "catalog/local", "urlParams" => $params))
+                ?> 
+            </div>
+        </div>
+    </footer>
+</section>
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Импорт Excel</h4>
+            </div>
+            <form role="form">
+                <div class="modal-body">
+                    <div role="loader" style="display: none; position: absolute;width: 100%;height: 100%;margin: -15px;background-color: rgba(255, 255, 255, 0.7);"><span class="fa fa-spinner fa-spin" style="font-size:40px;left: 45%;top: 45%;position: relative;"></span></div>
+                    <div class="modal-step" role="first">
+                        <p>Excel</p>
+                        <input type="file" name="file">
+                        <p>Поставшик</p>
+                        <select name="supplier">
+                            <option value="">Не выбран</option>
+                            <?foreach( $suppliers AS $supplier ):?> 
+                            <option value="<?= $supplier->code ?>" <?= ($currentSupplier == $supplier->code ? "selected" : "") ?>><?= $supplier->title ?></option>
+                            <?endforeach;?> 
+                        </select>
+                        <p>Внимание, позиции отсутствующие в файле но существующие в базе данных по этому поставщику будут удалены</p>
+                    </div>
+                    <div class="modal-step" role="second" style="display:none;">
+                        <h3>Параметры таблицы</h3>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Данные начинаются на строке №</td>
+                                    <td><select class="rowselect" name="config[start]"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Колонка Кросс-номер</td>
+                                    <td><select class="colselect" name="config[externalId]"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Колонка OEM\Артикул</td>
+                                    <td><select class="colselect" name="config[oem]"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Колонка бренд</td>
+                                    <td><select class="colselect" name="config[brand]"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Колонка Название</td>
+                                    <td><select class="colselect" name="config[title]"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Колонка Количество</td>
+                                    <td><select class="colselect" name="config[count]"></select></td>
+                                </tr>
+                                <tr>
+                                    <td>Колонка Цена</td>
+                                    <td><select class="colselect" name="config[price]"></select></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-step" role="three" style="display:none;">
+                        <p>Обработано строк: <b role="countAll"></b></p>
+                        <p>Успешно сохранено строк: <b role="countSuccess"></b></p>
+                        <p>Ошибки в сохранении строк: <b role="countFailed"></b></p>
+                        <p>Удалено старых записей: <b role="countRemoved"></b></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Продолжить</button>
+                </div>
+                <input type="hidden" name="step" value="first">
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

@@ -1,0 +1,40 @@
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <section class="panel panel-default">
+                                            <header class="panel-heading">
+                                                Товары
+                                            </header>
+                                            <table class="table table-striped m-b-none">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 50px;">ID</th>
+                                                        <th style="width: 100px;">Артикул</th>
+                                                        <th style="width: 100px;">Фотография</th>
+                                                        <th>Название</th>
+                                                        <th style="width: 100px;">Брэнд</th>
+                                                        <th>Тип</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?foreach( $items->items AS $item ):?> 
+                                                    <tr>
+                                                        <td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "item", "id" => $item->id))?>"><?=$item->id?></a></td>
+                                                        <td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "item", "id" => $item->id))?>"><?=$item->article?></a></td>
+                                                        <td>
+                                                            <a data-bjax href="<?=$this->url->get("catalog", array("action" => "item", "id" => $item->id))?>">
+                                                                <?if( $item->photo ):?> 
+                                                                <img src="<?=$item->photo?>" style="height: 50px;" alt="">
+                                                                <?endif;?> 
+                                                            </a>
+                                                        </td>
+                                                        <td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "item", "id" => $item->id))?>"><?=$item->name?></a></td>
+                                                        <td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "item", "id" => $item->id))?>"><?=$item->brand_name?></a></td>
+                                                        <td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "item", "id" => $item->id))?>"><?=$item->section_name?></a></td>
+                                                    </tr>
+                                                    <?endforeach;?> 
+                                                </tbody>
+                                            </table>
+                                            <pre><?print_r($items)?></pre>
+                                        </section>
+                                    </div>
+                                </div>

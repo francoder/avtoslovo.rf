@@ -1,0 +1,33 @@
+									<div class="row">
+										<div class="col-sm-12">
+											<section class="panel panel-default">
+												<header class="panel-heading">
+													Разделы
+												</header>
+												<table class="table table-striped m-b-none">
+													<thead>
+														<tr>
+															<th style="width: 50px;">ID</th>
+															<th style="width: 50px;">Логотип</th>
+															<th>Название</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?foreach( $sections AS $section ):?> 
+														<tr>
+															<td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "section", "id" => $section->id, "catalogId" => $catalogId))?>"><?=$section->id?></a></td>
+															<td>
+																<a data-bjax href="<?=$this->url->get("catalog", array("action" => "section", "id" => $section->id, "catalogId" => $catalogId))?>">
+																	<?if( $section->photo ):?> 
+																	<img src="<?=$section->photo?>" style="eight: 50px;" alt="">
+																	<?endif;?> 
+																</a>
+															</td>
+															<td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "section", "id" => $section->id, "catalogId" => $catalogId))?>"><?=$section->name?></a></td>
+														</tr>
+														<?endforeach;?> 
+													</tbody>
+												</table>
+											</section>
+										</div>
+									</div>

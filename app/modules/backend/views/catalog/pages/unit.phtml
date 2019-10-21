@@ -1,0 +1,87 @@
+<?$this->assets
+	->collection("footer")
+	->addJs("assets/js/catalog/dragscrollable.js")
+	->addJs("assets/js/catalog/jquery.mousewheel.js")
+	->addJs("assets/js/catalog/jquery.colorbox.js")
+	->addJs("assets/js/catalog/unit.js");
+?>
+									<?if( isset($info->attributes()["supportquickgroups"]) AND $info->attributes()["supportquickgroups"][0] ):?> 
+									<div class="panel panel-default text-sm doc-buttons">
+										<div class="panel-body">
+											<a href="<?=$this->url->get("catalog", array(
+												"action" => "find",
+												"code" => $catalogCode,
+												"vid" => $vid,
+												"ssd" => $ssd,
+											))?>" class="btn btn-sm btn-default">Быстрый поиск</a>
+											<a href="<?=$this->url->get("catalog", array(
+												"action" => "units",
+												"code" => $catalogCode,
+												"vid" => $vid,
+												"ssd" => $ssd,
+											))?>" class="btn btn-sm btn-default">Поиск по узлам</a>
+										</div>
+									</div>
+									<?endif;?> 
+									<style media="screen">
+									.image {
+										overflow: hidden;
+									}
+									.image .highlight:hover, .image .highlight.hover {
+										border: 1px solid #1aae88;
+									}
+									.image .highlight.active {
+										border: 3px solid #1aae88;
+									}
+									</style>
+									<div class="row">
+										<div class="col-md-5">
+											<div class="image" role="viewport">
+												<?if( $image ):?> 
+												<?foreach( $image->children() AS $point ):?> 
+												<div class="dragger highlight"
+													style="position:absolute;
+														width:<?=$point->attributes()["x2"]-$point->attributes()["x1"]?>px;
+														height:<?=$point->attributes()["y2"]-$point->attributes()["y1"]?>px;
+														margin-left:<?=$point->attributes()["x1"]?>px;
+														margin-top:<?=$point->attributes()["y1"]?>px;
+														overflow:hidden;"
+													data-name="<?=$point->attributes()["code"]?>"
+													data-width="<?=$point->attributes()["x2"]-$point->attributes()["x1"]?>"
+													data-height="<?=$point->attributes()["y2"]-$point->attributes()["y1"]?>"
+													data-left="<?=$point->attributes()["x1"]?>"
+													data-top="<?=$point->attributes()["y1"]?>"></div>
+												<?endforeach;?> 
+												<?endif;?> 
+												<?if( $unit ):?> 
+												<img class="dragger" src="<?=str_replace("%size%", "source", $unit->children()[0]->attributes()["imageurl"])?>"/>
+												<?endif;?> 
+											</div>
+										</div>
+										<div class="col-md-7">
+											<table class="table table-striped m-b-none" role="table">
+												<thead>
+													<tr>
+														<th style="width: 150px;">OEM</th>
+														<th>Номер</th>
+														<th>Название</th>
+														<th>Примечание</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?if( $details ):?> 
+													<?foreach( $details->children() AS $detail ):?> 
+													<tr data-image="<?=$detail->attributes()["codeonimage"]?>">
+														<td><a href="<?=$this->url->get("catalog/parts", array(
+															"query" => $detail->attributes()["oem"]->__toString(),
+														))?>" target="_blank"><?=$detail->attributes()["oem"]?></a></td>
+														<td><?=$detail->attributes()["codeonimage"]?></td>
+														<td><?=$detail->attributes()["name"]?></td>
+														<td><?=$detail->attributes()["note"]?></td>
+													</tr>
+													<?endforeach;?> 
+													<?endif;?> 
+												</tbody>
+											</table>
+										</div>
+									</div>

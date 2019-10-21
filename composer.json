@@ -1,0 +1,6 @@
+{
+    "require": {
+        "phpoffice/phpexcel": "^1.8",
+        "voronkovich/sberbank-acquiring-client": "^1"
+    }
+}

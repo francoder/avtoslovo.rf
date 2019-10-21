@@ -1,0 +1,19 @@
+			<section class="m-b-lg">
+				<header class="wrapper text-center">
+					<strong>Необходима авторизация</strong>
+				</header>
+				<form method="post">
+					<?if( $this->request->isPost() ):?> 
+					<div class="alert alert-danger">Некорректный Email/Пароль</div>
+					<?endif;?> 
+					<div class="list-group">
+						<div class="list-group-item">
+							<?=$form->render("email", array("placeholder" => "Email", "class" => "form-control no-border"))?> 
+						</div>
+						<div class="list-group-item">
+							<?=$form->render("password", array("placeholder" => "Пароль", "class" => "form-control no-border"))?> 
+						</div>
+					</div>
+					<button type="submit" class="btn btn-lg btn-primary btn-block">Войти</button>
+				</form>
+			</section>

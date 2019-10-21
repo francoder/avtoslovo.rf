@@ -1,0 +1,76 @@
+									<div class="row">
+										<div class="col-md-12">
+											<div class="panel panel-default">
+												<header class="panel-heading">
+													Поиск автомобиля по номеру кузова
+												</header>
+												<div class="panel-body">
+													<form action="<?=$this->url->get("catalog")?>" method="get" role="form">
+														<input type="hidden" name="action" value="frame">
+														<div class="form-group">
+															<label for="frame">Введите код и номер кузова</label>
+															<div class="row">
+																<div class="col-sm-6">
+																	<input class="form-control" type="text" placeholder="Код кузова" name="frame" id="frame" value="<?=htmlspecialchars($frame)?>">
+																</div>
+																<div class="col-sm-6">
+																	<input class="form-control" type="text" placeholder="Номер кузова" name="frameNo" id="frameNo" value="<?=htmlspecialchars($frameNo)?>">
+																</div>
+															</div>
+															<span class="help-block m-b-none">Например: FNN15-502358</span>
+														</div>
+														<button type="submit" class="btn btn-sm btn-default">Найти</button>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<section class="panel panel-default">
+												<header class="panel-heading">
+													Результаты поиска
+												</header>
+												<table class="table table-striped m-b-none">
+													<thead>
+														<tr>
+															<th style="width: 50px;">CODE</th>
+															<th>Название</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?if( count($results->children()) ):?> 
+														<?foreach( $results->children() AS $item ):?> 
+														<tr>
+															<td>
+																<a data-bjax href="<?=$this->url->get("catalog", array(
+																	"action" => "units",
+																	"code" => $item->attributes()["catalog"]->__toString(),
+																	"vid" => $item->attributes()["vehicleid"]->__toString(),
+																	"ssd" => $item->attributes()["ssd"]->__toString(),
+																	))?>">
+																	<?=$item->attributes()["vehicleid"]?>
+																</a>
+															</td>
+															<td>
+																<a data-bjax href="<?=$this->url->get("catalog", array(
+																	"action" => "units",
+																	"code" => $item->attributes()["catalog"]->__toString(),
+																	"vid" => $item->attributes()["vehicleid"]->__toString(),
+																	"ssd" => $item->attributes()["ssd"]->__toString(),
+																	))?>">
+																	<?=$item->attributes()["name"]?>
+																</a>
+															</td>
+														</tr>
+														<?endforeach;?> 
+														<?else:?>
+														<tr>
+															<td colspan="3">Нет результатов</td>
+														</tr> 
+														<?endif;?> 
+													</tbody>
+												</table>
+											</section>
+										</div>
+									</div>

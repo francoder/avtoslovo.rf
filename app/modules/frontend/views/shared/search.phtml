@@ -1,0 +1,156 @@
+<div class="search-container">
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#tab1">Номер детали</a></li>
+        <li><a data-toggle="tab" href="#tab3">VIN / номер кузова</a></li>
+        <li><a data-toggle="tab" href="#tab2">Марка</a></li>
+        <!--<li><a data-toggle="tab" href="#tab4">Консультация</a></li>-->
+    </ul>
+    <div class="tab-content">
+        <div id="tab1" class="tab-pane fade in active">
+            <form action="<?= $this->url->get("catalog/parts") ?>" method="get" role="form">
+
+                <a class="fastlink" href="http://xn--80aea9aobbuh.xn--p1ai/catalog/parts?query=4L0845099" style="margin: 1px 0 1px 0;font-size: 13px;color: #686868;position: absolute;z-index: 999;left:  230px;top: 45px;text-decoration:  underline;"> 4L0845099</a>
+                <div class="btn-group" style="min-width: calc(100% - 70px);" role="historyList">
+                    <input class="big full dropdown-toggle query parts-input"
+                           data-toggle="dropdown" 
+                           value="<?= !empty($query) ? htmlspecialchars($query) : "" ?>" 
+                           placeholder="Введите номер детали например :" 
+                           type="text" 
+                           name="query" 
+                           autocomplete="off">
+                    <script type="text/javascript">
+                        var query = $('input.query'),
+                            partsinput = $('.parts-input'),
+                            fastlink = $('.fastlink');
+                        var partsinputlength = partsinput.val();
+                        if (query.val().length) {
+                            fastlink.hide();
+                        }
+
+                        if(partsinputlength.length > 0) fastlink.hide();
+
+                        query.keyup(function (e) {
+                            fastlink.hide();
+                            console.log($(this).val());
+                            if (e.keyCode == 8) {
+                                if ($(this).val() == "") {
+                                    fastlink.show();
+                                }
+                            }
+                        });
+
+                    </script>
+                    <?php
+                    echo $this->partial("shared/history_list", [
+                        'list' => $partList,
+                        'type' => 'parts',
+                    ])
+                    ?>
+                </div>
+                <button class="big" type="submit">Найти</button>
+            </form>
+        </div>
+        <div id="tab2" class="tab-pane fade">
+            <div class="mark-container">
+                <?php if ($catalogs): ?>
+                    <ul>
+                        <?php
+                        $count = count($catalogs->children());
+                        $cols = 5;
+                        $itemsInCol = intval($count / $cols);
+                        $i = 0;
+                        foreach ($catalogs->children() AS $catalog):
+                            $i++;
+                            if ($i > $itemsInCol): $i = 0;
+                                ?>
+                            </ul>
+                            <ul>
+                            <?php endif; ?>
+                            <li>
+                                <a data-bjax href="<?= $this->url->get("catalog", array("action" => "catalog", "code" => $catalog->attributes()->code->__toString())) ?>">
+                                    <?= $catalog->attributes()["name"] ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <ul>
+                        <li><a href="#">Каталог временно недоступен</a></li>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div id="tab3" class="tab-pane fade">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p style="display:inline-block;margin: 10px 0 0 0; font-size: 13px;color: #686868;">Укажите VIN номер <a href="#vinnumber" data-toggle="modal" >Что такое VIN номер?</a></p>
+                    <form class="" action="<?= $this->url->get("catalog") ?>" method="get" role="form">
+                        <input type="hidden" name="action" value="vin">
+                        <div class="histories">
+                            <input class="big full query dropdown-toggle vin-input"
+                                   data-toggle="dropdown"
+                                   type="text" 
+                                   name="vin" 
+                                   id="vin" 
+                                   placeholder="VIN номер">
+                                   <?php
+                                   echo $this->partial("shared/history_list", [
+                                       'list' => $vinList,
+                                       'type' => 'vin',
+                                   ])
+                                   ?>
+                        </div>
+                        <div class="clearfix"></div>
+                        <button class="big full" type="submit">Найти</button>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <form class="" action="<?= $this->url->get("catalog") ?>" method="get" role="form">
+                        <input type="hidden" name="action" value="frame">
+                        <p style="display:inline-block;margin: 10px 0 0 0; font-size: 13px;color: #686868;">или укажите номер кузова. <a href="#numberbody" data-toggle="modal" >Что такое номер кузова?</a></p>
+                        <div class="histories histories-flex">
+                            <input class="big query dropdown-toggle frame-input"
+                                   type="text" 
+                                   data-toggle="dropdown"
+                                   placeholder="Марка кузова"
+                                   name="frame" 
+                                   id="frame-code" 
+                                   minlength="3"
+                                   required                                   
+                                   value="<?php echo isset($frame) ? $frame : null ?>">
+                            &#95;
+                            <input class="big query frame-number-input"
+                                   type="text" 
+                                   data-toggle="dropdown"
+                                   placeholder="Номер кузова" 
+                                   name="frame-number" 
+                                   id="frame-number"
+                                   minlength="6"
+                                   required
+                                   value="<?php echo isset($frameNumber) ? $frameNumber : null ?>">
+                                   <?php
+                                   echo $this->partial("shared/history_list", [
+                                       'list' => $frameList,
+                                       'type' => 'frame',
+                                   ])
+                                   ?>
+                        </div>
+                        <div class="clearfix"></div>
+                        <button class="big full" type="submit">Найти</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="tab4" class="tab-pane fade">
+            <p style="margin: 0px 0 10px 0;font-size: 13px;color: #686868;">Наш менеджер поможет вам найти нужную запчасть</p>
+            <form method="post" role="feedback">
+                <input class="big full" type="text" class="big" name="name" placeholder="Ваше имя">
+                <div class="clearfix"></div>
+                <input class="big full" type="text" class="big" name="phone" placeholder="Ваш номер телефона">
+                <div class="clearfix"></div>
+                <textarea name="comment" rows="8" class="full-width" placeholder="Вопрос (не обязательно)"></textarea>
+                <button class="big full" type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>

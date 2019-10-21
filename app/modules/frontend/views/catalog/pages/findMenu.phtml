@@ -1,0 +1,21 @@
+												<ul class="nav inter">
+													<?foreach( $item->children() AS $item ):?>
+													<li>
+														<a href="#" data-queryparams="<?=htmlspecialchars(json_encode(array(
+															"id" => $item->attributes()["quickgroupid"]->__toString(),
+															"link" => ($item->attributes()["link"]->__toString()=="true"?true:false),
+															"code" => $catalogCode,
+															"vid" => $vid,
+															"ssd" => $ssd,
+														)))?>" data-id="<?=$item->attributes()["quickgroupid"]->__toString()?>">
+															<?if( count($item->children()) > 0 ):?>
+															<i class="fa fa-plus-square-o m-t-xs text-xs icon-muted"></i>
+															<?endif;?>
+															<?=$item->attributes()["name"]?>
+														</a>
+														<?if( count($item->children()) > 0 ):?>
+														<?=$this->partial("catalog/pages/findMenu")?>
+														<?endif;?>
+													</li>
+													<?endforeach;?>
+												</ul>

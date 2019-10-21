@@ -1,0 +1,12 @@
+<div class="block block-text">
+    <p class="block-text-italic"><strong>Не тратьте время на изучение каталогов и поиска нужной запчасти. Звоните, пишите и наши консультанты вам помогут</strong></p>
+    <a class="block-text-button btn-style" href="#picking" data-toggle="modal">Написать</a>
+</div>
+<?php if(!empty($banners)): ?>
+<?php foreach($banners AS $banner):?>
+<div class="block" style="width:  100%;height: 100%;border-radius: 5px;background: #eeeeee;margin: 10px 0;">
+    <img src="<?= $banner->path ?>" alt="<?= htmlentities($banner->name, ENT_COMPAT | ENT_HTML401, 'UTF-8') ?>"
+         title="<?= addslashes($banner->title) ?>" style="width:100%;">
+</div>
+<?php endforeach; ?>
+<?php endif; ?>

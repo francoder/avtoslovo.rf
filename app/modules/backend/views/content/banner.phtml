@@ -1,0 +1,88 @@
+<?
+$this->assets
+    ->collection("footer")
+    ->addJs("assets/js/ordersList.js");
+?>
+<section class="panel panel-default">
+    <header class="panel-heading">
+        Баннеры
+    </header>
+    <div class="row wrapper">
+        <div class="col-sm-5 m-b-xs" role="bulk">
+            <select class="input-sm form-control input-s-sm inline v-middle">
+                <option value="0">Массовое действие</option>
+                <option value="1">Удалить выбранные</option>
+            </select>
+            <button class="btn btn-sm btn-default" type="submit">Применить</button>
+            <a class="btn btn-sm btn-default" data-toggle="modal" href="#uploadModal" type="button">Загрузить</a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <form method="post" role="bulkForm">
+            <style media="screen">
+
+            </style>
+            <table class="table table-striped b-t b-light">
+                <thead>
+                <tr>
+                    <th width="20">
+                        <label class="checkbox m-l m-t-none m-b-none i-checks">
+                            <input type="checkbox"><i></i>
+                        </label>
+                    </th>
+                    <th>ID</th>
+                    <th>Время создания</th>
+                    <th>Пользователь</th>
+                    <th>Изображение</th>
+                    <th>Путь</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if(!empty($banners)): ?>
+                <?php foreach($banners AS $banner): ?>
+                    <tr>
+                        <td>
+                            <label class="checkbox m-l m-t-none m-b-none i-checks">
+                                <input name="bulk[]" value="<?= $banner->id ?>" type="checkbox"><i></i>
+                            </label>
+                        </td>
+                        <td><?= $banner->id ?></td>
+                        <td><?= $banner->createdAt ?></td>
+                        <td><?= $banner->user->firstName . ' ' . $banner->user->lastName ?></td>
+                        <td><a href="<?= $banner->path ?>" target="_blank">
+                                <img src="<?= $banner->path ?>" title="<?= htmlspecialchars($banner->title, ENT_COMPAT | ENT_HTML401, 'UTF-8') ?>"
+                                     alt="<?= htmlspecialchars($banner->name, ENT_COMPAT | ENT_HTML401, 'UTF-8') ?>" width="100px" height="100px"></a></td>
+                        <td><?= $banner->path ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php endif; ?>
+                </tbody>
+            </table>
+            <input type="hidden" name="bulkAction" value="0">
+        </form>
+    </div>
+</section>
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Загрузка изображения</h4>
+            </div>
+            <form role="form" enctype="multipart/form-data" method="POST">
+                <div class="modal-body">
+                    <div>
+                        <p>.jpg, .jpeg, .png</p>
+                        <input type="text" name="banner_image_name" placeholder="Название" required="required">
+                        <input type="text" name="banner_image_title" placeholder="Заголовок" required="required">
+                        <input type="file" name="banner_image" required="required">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Продолжить</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

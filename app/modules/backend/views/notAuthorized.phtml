@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<?=$this->tag->getTitle()?> 
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<?
+$this->assets
+	->addCss("assets/css/app.v1.css");
+
+$this->assets
+	->collection("header")
+	->addJs("assets/js/app.v1.js")
+	->addJs("assets/js/app.plugin.js");
+
+$this->assets->outputCss();
+$this->assets->outputJs('header');
+?> 
+<!--[if lt IE 9]>
+<script src="<?=$this->url->get("assets/js/ie/html5shiv.js")?>"></script>
+<script src="<?=$this->url->get("assets/js/ie/respond.min.js")?>"></script>
+<script src="<?=$this->url->get("assets/js/ie/excanvas.js")?>"></script>
+<![endif]-->
+</head>
+<body>
+	<section id="content" class="m-t-lg wrapper-md animated fadeInUp">
+		<div class="container aside-xl">
+			<a class="navbar-brand block" href="<?=$this->url->get("")?>">Molly</a>
+			<?=$this->getContent()?> 
+		</div>
+	</section>
+	<!-- footer -->
+	<footer id="footer">
+		<div class="text-center padder">
+			<p> <small><!-- --></small> </p>
+		</div>
+	</footer>
+</body>
+</html>

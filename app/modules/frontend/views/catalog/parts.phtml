@@ -1,0 +1,352 @@
+<?php
+$this->assets
+->addCss("assets/js/vanillabox/theme/sweet/vanillabox.css");
+$this->assets
+->collection("footer")
+->addJs("assets/js/vanillabox/jquery.vanillabox-0.1.7.min.js")
+->addJs("assets/js/catalog/parts.js")
+->addJs("assets/js/core.js");
+?>
+<section class="row m-b-md">
+    <div class="col-sm-12">
+        <ul class="breadcrumb">
+            <li>
+                <a data-bjax href="/catalog">Каталог</a>
+            </li>
+            <li>
+                <a data-bjax href="/catalog/parts">Поиск запчастей</a>
+            </li>
+        </ul>
+    </div>
+</section>
+<div class="row">
+    <div class="col-sm-3">
+        <button type="button" name="button" style="width:  100%;height: 35px;position:  relative;top: 38px;"><i class="fa fa-location-arrow" aria-hidden="true"></i> Барнаул</button>
+
+        <div class="block" style="width:  100%;height: 200px;border-radius: 5px;background: #ffffff;margin: 60px 0 10px 0;padding:  4px 20px;border: 1px solid #eee;">
+            <h4 style="border-bottom: 2px solid;padding: 0 0 10px 0;">Наши контакты г. Барнаул</h4>
+            <p class="contact-item">Антона Петрова, 239а</p>
+            <p class="contact-item">8983-357-5123 Whatsapp</p>
+            <p class="contact-item">8906-969-3163</p>
+            <p class="contact-item">8923-169-6867</p>
+            <a style="color: #fff;padding: 5px;" href="#feedback" class="btn-style" data-toggle="modal">Обратный звонок</a>
+        </div>
+        <?= $this->partial("shared/leftbar") ?>
+    </div>
+    <div class="col-sm-9">
+    <?php echo $this->partial("shared/search") ?>
+        <?if( $query != "" ):?>
+        <?if( !empty($resultsByArticle) ):?>
+        <?if( $variantsCount > 1
+                    && strtolower($resultsByArticle[0]['brand']) != strtolower('LYNXAUTO')
+                    && strtolower($resultsByArticle[0]['brand']) != strtolower('LYNX')
+                    && strtolower($resultsByArticle[0]['brand']) != strtolower('KYB')
+                    && strtolower($resultsByArticle[0]['brand']) != strtolower('KAYABA')):?>
+                    <table style="width:100%;" id="variantsList">
+            <thead>
+                <tr>
+                    <td>Брэнд</td>
+                    <td>Артикул</td>
+                    <td>Наименование</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach( $resultsByArticle AS $article ):
+                if( $article["articleCode"] != $queryCode ) continue;
+                ?>
+                    <tr style="cursor:pointer;" onclick="window.location.href = '<?=
+                    $this->url->get("catalog/parts", array(
+                        "query" => $query,
+                        "brand" => $article["brand"],
+                    ))
+                    ?>'">
+                    <td>
+                        <?php if(strtolower($article["brand"]) == strtolower('LYNXAUTO')):?>
+                        <a href="<?=
+                        $this->url->get("catalog/parts", array(
+                            "query" => $query,
+                            "brand" => 'LYNX',
+                        ))
+                        ?>"><?= 'LYNX' ?></a>
+                        <?php elseif(strtolower($article["brand"]) == strtolower('KYB')):?>
+                        <a href="<?=
+                        $this->url->get("catalog/parts", array(
+                            "query" => $query,
+                            "brand" => 'KAYABA',
+                        ))
+                        ?>"><?= 'KAYABA' ?></a>
+                        <? else: ?>
+                            <a href="<?=
+                            $this->url->get("catalog/parts", array(
+                                "query" => $query,
+                                "brand" => $article["brand"],
+                            ))
+                            ?>"><?= $article["brand"] ?></a>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                            <a href="<?=
+                            $this->url->get("catalog/parts", array(
+                                "query" => $query,
+                                "brand" => $article["brand"],
+                            ))
+                            ?>"><?= $article["article"] ?></a>
+                    </td>
+                    <td>
+                            <a href="<?=
+                            $this->url->get("catalog/parts", array(
+                                "query" => $query,
+                                "brand" => $article["brand"],
+                            ))
+                            ?>"><?= $article["title"] ?></a>
+                    </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+        <?else:?>
+        <p>
+            Найденные товары
+            <?if( $this->auth->isAuthorized() AND $this->auth->getCurrent()->groupId == "1" ):?>
+            <span class="showprice" style="float: right;padding: 0px 1px;">
+                <input type="checkbox" name="showprice" id="showprice">
+                <label style="display:inline-block;" for="showprice">Показывать закупочную цену</label>
+            </span>
+            <?endif;?>
+        </p>
+        <div class="sort">
+            <ul>
+                <li style="padding: 0 60px 0 0px;">Склад</li>
+                <li style="padding: 0 60px 0 0px;">Оценка</li>
+                <li>Наличие</li>
+                <li><a href="#" role="sort" type="delivery">Срок доставки <i class="fa fa-chevron-down" aria-hidden="true"></i></a></li>
+                <li><a href="#" class="active" role="sort" type="price">Цена <i class="fa fa-chevron-down" aria-hidden="true"></i></a></li>
+            </ul>
+        </div>
+        <?php
+        $heading = array(
+            "original" => false,
+            "analog" => false,
+        );
+        foreach( $resultsByArticle AS $article ):?>
+        <?php if( $queryBrand != "" ):?>
+        <?php if( $article["articleCode"] == $queryCode AND $article["brand"] == $queryBrand AND !$heading["original"] ):?>
+        <h3>Искомый номер</h3>
+        <?php
+        $heading["original"] = true;
+        endif;?>
+        <?php if( ( $article["articleCode"] != $queryCode OR $article["brand"] != $queryBrand ) AND !$heading["analog"] ):?>
+        <h3>Аналог</h3>
+        <?php
+        $heading["analog"] = true;
+        endif;?>
+        <?php else:?>
+        <?php if( $article["articleCode"] == $queryCode AND !$heading["original"] ): $heading["original"] = true;?>
+        <h3>Искомый номер</h3>
+        <?php endif;?>
+        <?php if( $article["articleCode"] != $queryCode AND !$heading["analog"] ): $heading["analog"] = true;?>
+        <h3>Аналог</h3>
+        <?php
+            endif;
+            endif;
+        ?>
+        <div class="table-container">
+            <div class="item-container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="name-item">
+                            <?php
+                                $links = explode(",", $article["article"]);
+                            ?>
+                            <?php if(strtolower($article["brand"]) == strtolower('LYNXAUTO')):?>
+                            <a><?= 'LYNX' ?></a>
+                            <?php elseif(strtolower($article["brand"]) == strtolower('KYB')): ?>
+                            <a><?= 'KAYABA' ?></a>
+                            <? else: ?>
+                            <a><?= $article["brand"] ?></a>
+                            <?php endif; ?>
+                            <p title="<?= $article["title"] ?>">
+                                <?= $article["title"] ?><br>
+                                <?php foreach ($links AS $link): ?>
+                                <a href="<?=
+                                $this->url->get("catalog/parts", array(
+                                    "query" => str_replace(' ', '', $link),
+                                ))
+                                ?>"><?= $link ?></a>
+                                <?php endforeach; ?>
+                            </p>
+                            <?if( $article["photo"] != "" ):?>
+                            <a href="<?= $article["photo"] ?>" title="<?= htmlspecialchars($article["title"]) ?>" role="photo" target="_blank">
+                                <i class="fa fa-photo" aria-hidden="true"></i>
+                            </a>
+                            <?endif;?>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <table role="itemsTable">
+                            <tbody>
+                                <?php $count = 0;
+                                foreach( $article["items"] AS $item ):?>
+                                <?php foreach( $item["stocks"] AS $stock ):
+                                $count++;?>
+                                <tr data-delivery="<?= $stock["delivery"] ?>" data-price="<?= $stock["price"] ?>" <? if ( !$stock["delivery"] ) echo 'class="in-stock"';?>>
+                                    <td><a style="text-decoration:underline;"><?= $stock["id"] ?></a></td>
+                                    <td>
+                                        <a
+                                            style="display: inline-block;"
+                                            data-toggle="tooltip"
+                                            title=""
+                                            data-original-title="<?php echo $stock["stat"]->all."% поставленно<br>".$stock["stat"]->before."% быстрее<br>".$stock["stat"]->intime."% вовремя<br>".$stock["stat"]->fail."% с задержкой";?>">
+                                            <div class="rate">
+                                                <?for( $i = 5; $i > 0; $i-- ):?>
+                                                <input type="radio" id="star<?= $i ?><?= md5($stock["code"]) ?>" name="star<?= $i ?><?= md5($stock["code"]) ?>" value="<?= $i ?>" <?= ($i == $stock["rate"] ? "checked" : "") ?> disabled>
+                                                <label for="star<?= $i ?><?= md5($stock["code"]) ?>"><?= $i ?> stars</label>
+                                                <?endfor;?>
+                                            </div>
+                                        </a>
+                                        <br>
+                                        <?php if(!empty($localSupplier)): ?>
+                                            <?php foreach($localSupplier AS $supplier): ?>
+                                                <?php if($supplier->code == stristr($stock['id'], '0', true) && $supplier->contract == "Y"): ?>
+                                                    <strong>контрактная запчасть</strong>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $stock["count"] == 0 ? "Под заказ" : $stock["count"];?>
+                                    </td>
+                                    <td>
+                                        <a class="td-delivery<?php echo !$stock["delivery"] ? " td-delivery-stock" : "";?>" data-toggle="tooltip" title="" data-original-title="Доставка до пункта выдачи Барнаул ул. Антона Петрова, 239а">
+                                            <?php echo !$stock["delivery"] ? "В наличии" : $stock["delivery"]." дн" ?>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <b><?= number_format($stock["price"], 0, ".", "&nbsp;") ?>&nbsp;р.</b>
+                                        <?if( $this->auth->isAuthorized() AND $this->auth->getCurrent()->groupId == "1" ):?>
+                                        <div class="buyprice" style="display: none;">
+                                            <b><?= number_format($stock["originalPrice"], 0, ".", "&nbsp;") ?>&nbsp;р.</b>
+                                        </div>
+                                        <?endif;?>
+                                    </td>
+
+                                    <td>
+                                        <? $isInCart = $this->cart->isInCart($stock["code"]); ?>
+                                        <button
+                                            class="<?= ($isInCart ? "gray" : "") ?>"
+                                            style="padding:5px;float:right;font-size: 11px;background: #ff0000;color: #000;border: 1px solid #eee;color: #fff;"
+                                            type="button"
+                                            role="addToBasket"
+                                            data-cart="<?=
+                                            htmlspecialchars(json_encode(array(
+                                                "code" => $stock["code"],
+                                                "article" => $article["article"],
+                                                "brand" => $article["brand"],
+                                                "title" => $article["title"],
+                                                "delivery" => $stock["delivery"],
+                                                "aviable" => $stock["count"],
+                                                "price" => $stock["price"],
+                                            )))
+                                            ?>"
+                                            data-code="<?= $stock["code"] ?>">
+                                                <?= ($isInCart ? "<i style=\"color:  #000;font-size:  18px;margin: 0 5px;\" class=\"fa fa-cart-arrow-down\" aria-hidden=\"true\"></i>" : "<i style=\"color:  #fff;font-size:  18px;margin: 0 5px;\" class=\"fa fa-cart-plus\" aria-hidden=\"true\"></i>") ?>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php endforeach;?>
+                                <?php endforeach;?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endforeach;?>
+        <?endif;?>
+        <?else:?>
+        <div class="empty">
+            <p>Ничего не найдено</p>
+        </div>
+        <?endif;?>
+        <?endif;?>
+        <?if( $query != "" AND false ):?>
+        <?if( !empty($results) ):?>
+        <p>Найденные товары</p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td style="width: 40%;">Название</td>
+                        <td style="width: 125px;">Вероятность поставки</td>
+                        <td>Количество</td>
+                        <td style="width: 70px;">Время доставки</td>
+                        <td>Стоимость</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?foreach( $resultsByBrand AS $brandResults ):?>
+                    <?foreach( $brandResults AS $key => $result ):?>
+                    <tr>
+                        <?if( $key == 0 ):?>
+                        <td rowspan="<?= count($brandResults) ?>"><?= $result["brand"] ?></td>
+                        <?endif;?>
+                        <td>
+                            <?= $result["title"] ?><br>
+                            <a href="<?=
+                            $this->url->get("catalog/parts", array(
+                                "query" => $query,
+                            ))
+                            ?>"><?= $result["article"] ?></a>
+                            <?if( $result["photo"] != "" ):?>
+                            <a href="<?= $result["photo"] ?>" target="_blank">
+                                <i class="fa fa-photo" aria-hidden="true"></i>
+                            </a>
+                            <?endif;?>
+                        </td>
+                        <td>
+                            <a style="display: inline-block;" data-toggle="tooltip" title="Поставщик ZYG <br>94% поставленно<br>70% быстрее<br>90% вовремя<br>0% с задержкой">
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" />
+                                    <label for="star5">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" />
+                                    <label for="star4">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" />
+                                    <label for="star3">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                    <label for="star2">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                    <label for="star1">1 star</label>
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            <?if( $result["count"] == 0 ):?>
+                            Под заказ
+                            <?else:?>
+                            <?= $result["count"] ?>
+                            <?endif;?>
+                        </td>
+                        <td><a style="display: inline-block; cursor:pointer;" data-toggle="tooltip" title="Доставка до пункта выдачи Алтайский край ул. Попова 91"><?= $result["minDelivery"] ?> дн</a></td>
+                        <td><b><?= number_format($result["price"], 2, ".", " ") ?> р.<b></td>
+                                    <td><button style="padding:5px;" type="button" role="addToBasket" data-code="<?= $result["code"] ?>">Добавить в корзину</button></td>
+                                    </tr>
+                                    <?endforeach;?>
+                                    <?endforeach;?>
+                                    </tbody>
+                                    </table>
+                                    </div>
+                                    <?else:?>
+                                    <div class="empty">
+                                        <p>Ничего не найдено</p>
+                                    </div>
+                                    <?endif;?>
+                                    <?endif;?>
+                                    </div>
+                                    </div>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>

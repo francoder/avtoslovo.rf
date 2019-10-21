@@ -1,0 +1,148 @@
+<?
+$this->assets
+	->addCss("assets/js/vanillabox/theme/sweet/vanillabox.css");
+$this->assets
+	->collection("footer")
+	->addJs("assets/js/vanillabox/jquery.vanillabox-0.1.7.min.js")
+	->addJs("assets/js/catalog/parts.js");
+?> 
+								<section class="row m-b-md">
+									<div class="col-sm-12">
+										<h3 class="m-b-xs text-black">Поиск запчастей</h3>
+									</div>
+								</section>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="panel panel-default">
+											<header class="panel-heading">
+												Поиск запчастей
+											</header>
+											<div class="panel-body">
+												<form action="<?=$this->url->get("catalog/parts")?>" method="get" role="form">
+													<div class="form-group">
+														<label for="query">Введите номер запчасти</label>
+														<input class="form-control" placeholder="Номер запчасти" type="text" name="query" id="query" value="<?=htmlspecialchars($query)?>">
+														<span class="help-block m-b-none">Например: 4L0845099</span>
+													</div>
+													<button type="submit" class="btn btn-sm btn-default">Найти</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+								<?if( $query != "" ):?> 
+								<section class="panel panel-default">
+									<header class="panel-heading">
+										Найденные товары
+										<div class="pull-right">
+											<div class="checkbox i-checks" style="margin: 0px;">
+												<label>
+													<input type="checkbox" name="originalPriceVisible">
+													<i></i>
+													Показывать закупочную цену
+												</label>
+											</div>
+										</div>
+									</header>
+									<table class="table table-striped m-b-none">
+										<thead>
+											<tr>
+												<th>Информация</th>
+												<th>Варианты</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?if( !empty($resultsByArticle) ):?> 
+											<?
+											$heading = array(
+												"original" => false,
+												"analog" => false,
+											);
+											foreach( $resultsByArticle AS $article ):?>
+											<?if( $article["articleCode"] == $queryCode AND !$heading["original"] ):?> 
+											<tr>
+												<td colspan="2">
+													<span class="h4">Искомый номер</span>
+												</td>
+											</tr>
+											<?
+											$heading["original"] = true;
+											endif;?> 
+											<?if( $article["articleCode"] != $queryCode AND !$heading["analog"] ):?> 
+											<tr>
+												<td colspan="2">
+													<span class="h4">Аналог</span>
+												</td>
+											</tr>
+											<?
+											$heading["analog"] = true;
+											endif;?> 
+											<tr>
+												<td>
+													<h5 style="margin: 0px;"><?=$article["title"]?></h5><br>
+													<h3 style="margin: 0px;"><?=$article["brand"]?></h3><br>
+													<a href="<?=$this->url->get("catalog/parts", array(
+														"query" => $article["article"],
+													))?>"><?=$article["article"]?></a>
+													<?if( $article["photo"] != "" ):?> 
+													<br>
+													<a href="<?=$article["photo"]?>" target="_blank" role="photo" title="<?=htmlspecialchars($article["title"])?>">
+														<img src="<?=$article["photo"]?>" alt="" style="height: 100px; max-width: 150px;">
+													</a>
+													<?endif;?> 
+												</td>
+												<td style="padding: 0px;">
+													<table class="table table-striped m-b-none">
+														<thead>
+															<tr>
+																<td style="width: 200px;">Код</td>
+																<td>ID склада</td>
+																<td>Количество</td>
+																<td>Доставка</td>
+																<td>Цена</td>
+															</tr>
+														</thead>
+														<tbody>
+															<?foreach( $article["items"] AS $item ):?>
+															<?foreach( $item["stocks"] AS $stock ):?> 
+															<tr>
+																<td>
+																	<div style="width: 200px; overflow-x: auto;">
+																		<?=implode("<br>", explode("::", $stock["code"]))?>
+																	</div>
+																</td>
+																<td><?=$stock["id"]?></td>
+																<td><?=$stock["count"]?></td>
+																<td>
+																	<?if( $stock["delivery"] > 0 ):?> 
+																	<?=$stock["delivery"]?>&nbsp;дн.
+																	<?else:?> 
+																	В&nbsp;наличии
+																	<?endif;?> 
+																</td>
+																<td>
+																	<span style="display:none;" role="buyprice"><?=number_format($stock["originalPrice"], 2, ".", "&nbsp;")?>&nbsp;р.<br></span>
+																	<span
+																		data-toggle="tooltip"
+																		data-placement="top"
+																		data-original-title="Закупочная цена: <?=number_format($stock["originalPrice"], 2, ".", "&nbsp;")?>&nbsp;р.">
+																		<?=number_format($stock["price"], 2, ".", "&nbsp;")?>&nbsp;р.
+																	</span>
+																</td>
+															</tr>
+															<?endforeach;?> 
+															<?endforeach;?> 
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<?endforeach;?> 
+											<?else:?> 
+											<tr>
+												<td colspan="2">Нет результатов</td>
+											</tr>
+											<?endif;?> 
+										</tbody>
+									</table>
+								</section>
+								<?endif;?> 

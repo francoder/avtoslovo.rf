@@ -1,0 +1,5 @@
+<ul>
+    <?foreach( $this->menu->getMenu() AS $menuItem ):?> 
+    <li class="<?= ($menuItem->current ? "active" : "") ?>"><a href="<?= $menuItem->link ?>"><?= $menuItem->title ?></a></li>
+    <?endforeach;?> 
+</ul>

@@ -1,0 +1,17 @@
+					<li>
+						<span class="arrow top"></span>
+						<a href="<?=$this->url->get(array(
+							"for" => "user",
+							"id" => $this->auth->getCurrentId(),
+						))?>">Настройки</a>
+					</li>
+					<li>
+						<a href="<?=$this->url->get(array(
+							"for" => "user",
+							"id" => $this->auth->getCurrentId(),
+						))?>">Профиль</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="<?=$this->url->get("logout")?>">Выход</a>
+					</li>

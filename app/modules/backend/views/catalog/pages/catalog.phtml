@@ -1,0 +1,92 @@
+									<div class="row">
+										<?if( isset($info->attributes()["supportvinsearch"]) AND $info->attributes()["supportvinsearch"][0] ):?> 
+										<div class="col-sm-6">
+											<div class="panel panel-default">
+												<header class="panel-heading">
+													Поиск автомобиля по VIN
+												</header>
+												<div class="panel-body">
+													<form action="<?=$this->url->get("catalog")?>" method="get" role="form">
+														<input type="hidden" name="action" value="vin">
+														<div class="form-group">
+															<label for="vin">Введите VIN (17 знаков)</label>
+															<input class="form-control" placeholder="VIN" type="text" name="vin" id="vin">
+															<span class="help-block m-b-none">Например: <?=$info->attributes()["vinexample"][0]?></span>
+														</div>
+														<button type="submit" class="btn btn-sm btn-default">Найти</button>
+													</form>
+												</div>
+											</div>
+										</div>
+										<?endif;?> 
+										<?if( isset($info->attributes()["supportframesearch"]) AND $info->attributes()["supportframesearch"][0] ):?> 
+										<div class="col-md-6">
+											<div class="panel panel-default">
+												<header class="panel-heading">
+													Поиск автомобиля по номеру кузова
+												</header>
+												<div class="panel-body">
+													<form action="<?=$this->url->get("catalog")?>" method="get" role="form">
+														<input type="hidden" name="action" value="frame">
+														<div class="form-group">
+															<label for="frame">Введите код и номер кузова</label>
+															<div class="row">
+																<div class="col-sm-6">
+																	<input class="form-control" type="text" placeholder="Код кузова" name="frame" id="frame">
+																</div>
+																<div class="col-sm-6">
+																	<input class="form-control" type="text" placeholder="Номер кузова" name="frameNo" id="frameNo">
+																</div>
+															</div>
+															<span class="help-block m-b-none">Например: <?=$info->attributes()["frameexample"][0]?></span>
+														</div>
+														<button type="submit" class="btn btn-sm btn-default">Найти</button>
+													</form>
+												</div>
+											</div>
+										</div>
+										<?endif;?> 
+									</div>
+									<?if( $catalog ):?> 
+									<div class="row">
+										<div class="col-sm-12">
+											<section class="panel panel-default">
+												<header class="panel-heading">
+													Выберите модель
+												</header>
+												<div class="panel-body">
+													<div class="form-horizontal">
+														<?foreach( $catalog->children() AS $selector ):?> 
+														<div class="form-group">
+															<label class="col-sm-2 control-label"><?=$selector->attributes()["name"]?></label>
+															<div class="col-sm-10">
+																<?if( !empty($selector->options->children()) ):?> 
+																<select class="form-control m-b" data-base="<?=$this->url->get("catalog", array("action" => "catalog", "code" => $catalogCode))?>" onchange="console.log(this.dataset.base, this.value, window.location.href = this.dataset.base + '&ssd=' + this.value);window.location.href = this.dataset.base + '&ssd=' + this.value">
+																	<option value="">Не выбрано</option>
+																	<?foreach( $selector->options->children() AS $option ):?> 
+																	<option value="<?=$option->attributes()["key"]?>"><?=$option->attributes()["value"]?></option>
+																	<?endforeach;?> 
+																</select>
+																<?else:?> 
+																<div class="col-sm-4">
+																	<p class="form-control-static"><?=$selector->attributes()["value"]?></p>
+																</div>
+																<div class="col-sm-1">
+																	<button class="btn btn-primary" onclick="window.location.href = '<?=$this->url->get("catalog", array("action" => "catalog", "code" => $catalogCode, "ssd" => $selector->attributes()["ssd"]->__toString()))?>'" type="button">Отменить</button>
+																</div>
+																<?endif;?> 
+															</div>
+														</div>
+														<div class="line line-dashed b-b line-lg pull-in"></div>
+														<?endforeach;?> 
+														<div class="form-group">
+															<div class="col-sm-4 col-sm-offset-2">
+																<button class="btn btn-primary" type="button" onclick="window.location.href = '<?=$this->url->get("catalog", array("action" => "model", "code" => $catalogCode, "ssd" => $ssd))?>'">Продолжить</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</section>
+										</div>
+									</div>
+									<?endif;?> 

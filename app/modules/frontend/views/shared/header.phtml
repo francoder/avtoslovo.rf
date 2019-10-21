@@ -1,0 +1,200 @@
+<button id="toTop">Наверх</button>
+<header>
+    <div class="fixedheader">
+        <div class="container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="logo-container">
+                            <a href="/">
+                                <h1 class="logo">авто<e>слово.</e>рф</h1>
+                                <span class="logo-text">до края земли</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="search-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab1head">Номер детали</a></li>
+                                <li><a data-toggle="tab" href="#tab3head">VIN номер / номер кузова</a></li>
+                                <li><a data-toggle="tab" href="#tab2head">Марка</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab1head" class="tab-pane fade in active">
+                                    <form action="/catalog/parts" method="get" role="form">
+                                        <div class="btn-group">
+                                            <input class="full dropdown-toggle parts-input" data-toggle="dropdown" placeholder="Номер запчасти" type="text" name="query" id="query" value="<?= (isset($query) ? htmlspecialchars($query) : "") ?>" autocomplete="off">
+                                            <?if( isset($partList) AND count($partList) ):?>
+                                            <?php
+                                            echo $this->partial("shared/history_list", [
+                                                'list' => $partList,
+                                                'type' => 'parts',
+                                            ])
+                                            ?>
+                                            <?endif;?>
+                                        </div>
+                                        <button type="submit">Найти</button>
+                                    </form>
+                                </div>
+                                <div id="tab2head" class="tab-pane fade">
+                                    <div class="mark-container mark-container-header">
+                                        <?php if ($catalogs): ?>
+                                            <ul>
+                                                <?php
+                                                $count = count($catalogs->children());
+                                                $cols = 5;
+                                                $itemsInCol = intval($count / $cols);
+                                                $i = 0;
+                                                foreach ($catalogs->children() AS $catalog):
+                                                    $i++;
+                                                    if ($i > $itemsInCol): $i = 0;
+                                                        ?>
+                                                    </ul>
+                                                    <ul>
+                                                    <?php endif; ?>
+                                                    <li>
+                                                        <a data-bjax href="<?= $this->url->get("catalog", array("action" => "catalog", "code" => $catalog->attributes()->code->__toString())) ?>">
+                                                            <?= $catalog->attributes()["name"] ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php else: ?>
+                                            <ul>
+                                                <li><a href="#">Каталог временно недоступен</a></li>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div id="tab3head" class="tab-pane fade">
+                                    <div class="row">
+                                        <div>                                           
+                                            <div class="col-sm-5">
+                                                <form class="" action="<?= $this->url->get("catalog") ?>" method="get" role="form">
+                                                    <input type="hidden" name="action" value="vin">
+                                                    <div class="histories">
+                                                        <input class="query dropdown-toggle vin-input"
+                                                               data-toggle="dropdown"
+                                                               type="text" 
+                                                               name="vin" 
+                                                               id="vin" 
+                                                               placeholder="VIN номер">
+                                                               <?php
+                                                               echo $this->partial("shared/history_list", [
+                                                                   'list' => $vinList,
+                                                                   'type' => 'vin',
+                                                               ])
+                                                               ?>
+                                                        <button class="" type="submit">Найти</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-sm-7" style="padding: 0;">
+                                                <form class="" action="<?= $this->url->get("catalog") ?>" method="get" role="form">
+                                                    <input type="hidden" name="action" value="frame">
+                                                    <div class="histories">
+                                                        <input class="query dropdown-toggle frame-input"
+                                                               type="text" 
+                                                               data-toggle="dropdown"
+                                                               placeholder="Марка кузова"
+                                                               name="frame" 
+                                                               id="frame" 
+                                                               minlength="3"
+                                                               required
+                                                               value="">
+                                                        <sup>&#95;</sup>
+                                                        <input class="query frame-number-input"
+                                                               type="text" 
+                                                               data-toggle="dropdown"
+                                                               placeholder="Номер кузова" 
+                                                               name="frame-number"
+                                                               id="frame-number"
+                                                               minlength="6"
+                                                               required
+                                                               value="">
+                                                               <?php
+                                                               echo $this->partial("shared/history_list", [
+                                                                   'list' => $frameList,
+                                                                   'type' => 'frame',
+                                                               ])
+                                                               ?>
+                                                        <button class="" type="submit">Найти</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div style="padding: 15px 0;">
+                            <div role="cart">
+                                <a href="/cart" role="text">Корзина: <?= $cartCount ?></a>
+                            </div>
+                            <div class="clearfix"></div>
+                            <?if( $this->auth->isAuthorized() ):?>
+                            <div class="dropdown hover" style="cursor:default">
+                                <span style="font-size: 14px;color: #4b4b4b;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                Здравствуйте, <?= $this->auth->getCurrent()->firstName ?><br>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
+                                <ul style="margin: 10px -15px;" class="dropdown-menu">
+                                    <li><a href="/profile/balance">Баланс: <?= number_format($this->auth->getCurrent()->getBalance(), 2, ",", "&nbsp;") ?>р.</a></li>
+                                    <li><a href="/profile/auto">Мои автомобили</a></li>
+                                    <li><a href="/profile/orders">Мои заказы</a></li>
+                                    <li><a href="/profile/settings">Настройки</a></li>
+                                    <!--<li><a href="<?= $this->url->get("profile") ?>">Профиль</a></li>-->
+                                    <li class="divider"></li>
+                                    <li><a href="<?= $this->url->get("logout") ?>">Выход</a></li>
+                                </ul>
+                            </div>
+                            <?else:?>
+                            <a class="btn-style" href="<?= $this->url->get("login") ?>">Войти</a>  или
+                            <a class="btn-style" href="<?= $this->url->get("register") ?>">Зарегистрироваться</a>
+                            <?endif;?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="header-container">
+                <a href="/"><h1 class="logo">авто<e>слово.</e>рф</h1><span style="position:  relative;left: -123px;font-weight: 700;top: -9px;">до края земли</span></a>
+                <a href="/cart" role="cart" style="text-decoration: none!important;">
+                    <div style="float:right;position: relative;">
+                        <div class="bag" data-count="<?= $cartCount ?>">
+                            <span><i style="cursor:pointer; font-size: 26px;color: #ffffff;margin: 0 10px 13px 0px;background: #ffc700;padding: 10px 13px 10px 10px;border-radius: 5px;" class="fa fa-shopping-cart" aria-hidden="true"></i> <span  role="text">Корзина: <?= $cartCount ?></span></span>
+                        </div>
+                </a>
+                <?if( $this->auth->isAuthorized() ):?>
+                <div class="dropdown hover" style="cursor:default; font-size:13px; display:inline-block;">
+                    <span style="font-size: 14px;color: #4b4b4b;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Здравствуйте, <?= $this->auth->getCurrent()->firstName ?><br>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
+                    <ul style="margin: 10px -15px;" class="dropdown-menu">
+                        <li><a href="/profile/balance">Баланс: <?= number_format($this->auth->getCurrent()->getBalance(), 2, ",", "&nbsp;") ?>р.</a></li>
+                        <li><a href="/profile/auto">Мои автомобили</a></li>
+                        <li><a href="/profile/orders">Мои заказы</a></li>
+                        <li><a href="/profile/settings">Настройки</a></li>
+                        <!--<li><a href="<?= $this->url->get("profile") ?>">Профиль</a></li>-->
+                        <li class="divider"></li>
+                        <li><a href="<?= $this->url->get("logout") ?>">Выход</a></li>
+                    </ul>
+                </div>
+                <?else:?>
+                <a class="btn-style" href="<?= $this->url->get("login") ?>">Войти</a>  или
+                <a class="btn-style" href="<?= $this->url->get("register") ?>">Зарегистрироваться</a>
+                <?endif;?>
+            </div>
+            <!--<div class="phone">
+                    <p style="margin-bottom:0;font-size: 14px;line-height: 25px;color: #000;"><i style="color: #f00;font-size: 18px;position: relative;top: 0px;padding: 0 3px;" class="fa fa-map-marker" aria-hidden="true"></i>Барнаул, ул. Северо-Западная 155 АвтоМаг<br><span><i class="fa fa-whatsapp" style="color: #00ec00;font-size: 15px;position: relative;left: -2px;top: 1px;" aria-hidden="true"></i> +7 (983)-357-5123</span></p>
+                    <div class="clearfix"></div>
+                    <a href="#feedback" class="btn-style" data-toggle="modal" style="text-decoration:none; color:#fff;">Обратный звонок</a>
+            </div>-->
+        </div>
+    </div>
+</div>
+</header>

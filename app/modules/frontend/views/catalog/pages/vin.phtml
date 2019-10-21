@@ -1,0 +1,93 @@
+<div class="row">
+    <div class="col-sm-12">        
+    <?php echo $this->partial("shared/search") ?>
+    </div>
+</div>
+<?if( $results AND count($results->children()) ):?>
+<div class="row">
+    <div class="col-sm-12">
+        <section class="panel panel-default">
+            <header class="panel-heading">
+                Результаты поиска
+            </header>
+            <table class="table table-striped m-b-none">
+                <thead>
+                    <tr>
+                        <td style="widtd: 50px;">Номер</td>
+                        <td>Марка</td>
+                        <td>Модель</td>
+                        <td>Дополнительная информация</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?foreach( $results->children() AS $item ):?>
+                    <tr onclick="window.location.href = '<?=
+                    $this->url->get("catalog", array(
+                        "action" => "find",
+                        "code" => $item->attributes()["catalog"]->__toString(),
+                        "vid" => $item->attributes()["vehicleid"]->__toString(),
+                        "ssd" => $item->attributes()["ssd"]->__toString(),
+                    ))
+                    ?>'">
+                        <td>
+                            <a data-bjax href="<?=
+                            $this->url->get("catalog", array(
+                                "action" => "find",
+                                "code" => $item->attributes()["catalog"]->__toString(),
+                                "vid" => $item->attributes()["vehicleid"]->__toString(),
+                                "ssd" => $item->attributes()["ssd"]->__toString(),
+                            ))
+                            ?>">
+                                   <?= $item->attributes()["vehicleid"] ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?=
+                            $this->url->get("catalog", array(
+                                "action" => "find",
+                                "code" => $item->attributes()["catalog"]->__toString(),
+                                "vid" => $item->attributes()["vehicleid"]->__toString(),
+                                "ssd" => $item->attributes()["ssd"]->__toString(),
+                            ))
+                            ?>">
+                                   <?= $item->attributes()["brand"] ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?=
+                            $this->url->get("catalog", array(
+                                "action" => "find",
+                                "code" => $item->attributes()["catalog"]->__toString(),
+                                "vid" => $item->attributes()["vehicleid"]->__toString(),
+                                "ssd" => $item->attributes()["ssd"]->__toString(),
+                            ))
+                            ?>">
+                                   <?= $item->attributes()["name"] ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a data-bjax href="<?=
+                            $this->url->get("catalog", array(
+                                "action" => "find",
+                                "code" => $item->attributes()["catalog"]->__toString(),
+                                "vid" => $item->attributes()["vehicleid"]->__toString(),
+                                "ssd" => $item->attributes()["ssd"]->__toString(),
+                            ))
+                            ?>">
+                                <?php foreach ($item->attribute AS $attr): ?>
+                                    <?= $attr['value']->__toString()?>
+                                <?php endforeach; ?>
+                            </a>
+                        </td>
+                    </tr>
+                    <?endforeach;?>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+<?else:?>
+<div class="empty">
+    <p>Ничего не найдено</p>
+</div>
+<?endif;?>

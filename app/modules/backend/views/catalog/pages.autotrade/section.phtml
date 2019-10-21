@@ -1,0 +1,34 @@
+								<div class="row">
+									<div class="col-sm-12">
+										<section class="panel panel-default">
+											<header class="panel-heading">
+												Подразделы
+											</header>
+											<table class="table table-striped m-b-none">
+												<thead>
+													<tr>
+														<th style="width: 50px;">ID</th>
+														<th style="width: 100px;">Фотография</th>
+														<th>Название</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?foreach( $subsections AS $section ):?> 
+													<tr>
+														<td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "subsection", "id" => $section->id, "catalogId" => $catalogId, "sectionId" => $sectionId))?>"><?=$section->id?></a></td>
+														<td>
+															<a data-bjax href="<?=$this->url->get("catalog", array("action" => "subsection", "id" => $section->id, "catalogId" => $catalogId, "sectionId" => $sectionId))?>">
+															<?if( $section->photo_preview != "" ):?> 
+															<img src="<?=$section->photo_preview?>" style="height: 50px;" alt="">
+															<?endif;?> 
+															</a>
+														</td>
+														<td><a data-bjax href="<?=$this->url->get("catalog", array("action" => "subsection", "id" => $section->id, "catalogId" => $catalogId, "sectionId" => $sectionId))?>"><?=$section->name?></a></td>
+													</tr>
+													<?endforeach;?> 
+												</tbody>
+											</table>
+											<pre><?print_r($subsections)?></pre>
+										</section>
+									</div>
+								</div>

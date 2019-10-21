@@ -1,0 +1,78 @@
+<?php if (count($list)): ?>
+    <ul class="dropdown-menu">
+        <?php
+        foreach ($list AS $item):
+            switch ($type) {
+                case "parts":
+                    $type = "parts";
+                    $value = $item->article;
+                    $href = $this->url->get("catalog/parts", ["query" => $value]);
+                    break;
+                case "vin":
+                    $type="vin";
+                    $value = $item->vin;
+                    $href = $this->url->get("catalog?action=vin", ["vin" => $value]);
+                    $value .= " ({$item->model})";
+                    break;
+                case "frame":
+                    $type = "frame";
+                    $value = $item->frame;
+                    $href = $this->url->get("catalog?action=frame", [
+                            "frame" => stristr($value, '-', true),
+                            "frame-number" => str_replace('-','', stristr($value, '-'))
+                    ]);
+                    $value .= " ({$item->model})";
+                    break;
+            }
+            $title = htmlspecialchars($value);
+            echo "<li class='text-link {$type}'><a href=\"{$href}\" data-title=\"{$title}\">{$value}</a></li>";
+        endforeach;
+        ?>
+    </ul>
+    <script type="text/javascript">
+        function stristr( haystack, needle, bool ) {
+            var pos = 0;
+            pos = haystack.toLowerCase().indexOf( needle.toLowerCase() );
+            if( pos == -1 ){
+                return false;
+            } else{
+                if( bool ){
+                    return haystack.substr( 0, pos );
+                } else{
+                    return haystack.slice( pos );
+                }
+            }
+        }
+
+        $('.text-link').click(function () {
+            var partsinputlength = partsinput.val();
+            if(partsinputlength.length > 0) fastlink.hide();
+
+            if($(this).hasClass('parts')) {
+                $('.parts-input').val($(this).text());
+            } else if ($(this).hasClass('vin')) {
+                $('.vin-input').val($(this).text());
+            } else {
+                var framemark = $(this).text().split('-')[0];
+                var framenumber = stristr($(this).text().split('-')[1], ' ', true);
+                $('.frame-input').val(framemark);
+                $('.frame-number-input').val(framenumber);
+            }
+        });
+    </script>
+<?php endif; ?>
+<?php if($this->auth->isAuthorized()): ?>
+    <?php if($list == $vinListLastFive): ?>
+        <ul class="list-unstyled">
+            <?php
+            foreach ($list AS $item):
+                 $value = $item->vin;
+                 $href = $this->url->get("catalog?action=vin", ["vin" => $value]);
+                 $value .= " ({$item->model})";
+                 $title = htmlspecialchars($value);
+                echo "<li class='text-link'><a href=\"{$href}\" data-title=\"{$title}\">{$value}</a></li>";
+            endforeach;
+            ?>
+        </ul>
+    <?php endif; ?>
+<?php endif; ?>

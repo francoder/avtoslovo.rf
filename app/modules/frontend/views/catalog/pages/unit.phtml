@@ -1,0 +1,117 @@
+<?$this->assets
+->collection("footer")
+->addJs("assets/js/catalog/dragscrollable.js")
+->addJs("assets/js/catalog/jquery.mousewheel.js")
+->addJs("assets/js/catalog/jquery.colorbox.js")
+->addJs("assets/js/catalog/unit.js");
+?>
+<?if( isset($info->attributes()["supportquickgroups"]) AND $info->attributes()["supportquickgroups"][0] ):?>
+<div class="panel panel-default text-sm doc-buttons">
+    <div class="panel-body">
+        <a href="<?=
+        $this->url->get("catalog", array(
+            "action" => "find",
+            "code" => $catalogCode,
+            "vid" => $vid,
+            "ssd" => $ssd,
+        ))
+        ?>" class="btn btn-sm btn-default">Быстрый поиск</a>
+        <a href="<?=
+        $this->url->get("catalog", array(
+            "action" => "units",
+            "code" => $catalogCode,
+            "vid" => $vid,
+            "ssd" => $ssd,
+        ))
+        ?>" class="btn btn-sm btn-default">Поиск по узлам</a>
+    </div>
+</div>
+<?endif;?>
+<style media="screen">
+    .image {
+        overflow: hidden;
+    }
+    .image .highlight:hover, .image .highlight.hover {
+        border: 1px solid #1aae88;
+    }
+    .image .highlight.active {
+        border: 3px solid #1aae88;
+    }
+
+    .hided {
+        display: none;
+    }
+
+    .sized {
+        width: 100% !important;
+        height: auto!important;
+    }
+</style>
+<div class="row">
+    <a href="#" class="unitzoom pull-right">+ Увеличить изображение</a>
+    <div class="col-md-5">
+        <table class="table table-striped m-b-none unitparams" role="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Номер</th>
+                    <th style="width: 150px;">OEM номер запчасти</th>
+                    <th>Название</th>
+                </tr>
+            </thead>
+            <tbody class="list-details">
+                <?if( $details ):?>
+                <?foreach( $details->children() AS $detail ):?>
+                <tr data-image="<?= $detail->attributes()["codeonimage"] ?>">
+                    <?php echo "<td><input class=\"checker\" type=\"checkbox\" value=\"{$detail->attributes()["codeonimage"]}\"/>"; ?>
+                    <td><?= $detail->attributes()["codeonimage"] ?></td>
+                    <td><a href="<?=
+                        $this->url->get("catalog/parts", array(
+                            "query" => $detail->attributes()["oem"]->__toString(),
+                        ))
+                        ?>" target="_blank"><?= $detail->attributes()["oem"] ?></a></td>
+                    <td data-toggle="tooltip" data-placement="top" title="<?= $detail->attributes()["note"] ?>"><?= $detail->attributes()["name"] ?></td>
+                </tr>
+                <?endforeach;?>
+                <?endif;?>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-7 unitblock">
+        <div class="image" role="viewport">
+            <?php if( $image ):?>
+                <?php foreach( $image->children() AS $point ):?>
+                    <div class="dragger highlight"
+                         style="position:absolute;
+                                 width:<?= $point->attributes()["x2"] - $point->attributes()["x1"] ?>px;
+                                 height:<?= $point->attributes()["y2"] - $point->attributes()["y1"] ?>px;
+                                 margin-left:<?= $point->attributes()["x1"] ?>px;
+                                 margin-top:<?= $point->attributes()["y1"] ?>px;
+                                 overflow:hidden;"
+                         data-name="<?= $point->attributes()["code"] ?>"
+                         data-width="<?= $point->attributes()["x2"] - $point->attributes()["x1"] ?>"
+                         data-height="<?= $point->attributes()["y2"] - $point->attributes()["y1"] ?>"
+                         data-left="<?= $point->attributes()["x1"] ?>"
+                         data-top="<?= $point->attributes()["y1"] ?>"></div>
+                <?php endforeach;?>
+            <?php endif;?>
+            <?php if( $unit ):?>
+            <img class="unitimage dragger"  src="<?= str_replace("%size%", "source", $unit->children()[0]->attributes()["imageurl"]) ?>"/>
+            <?php endif;?>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    $(".unitzoom").click(function() {
+        $('.unitparams').toggleClass('hided');
+        $('.unitblock').toggleClass('sized');
+        $('.image').toggleClass('sized');
+        $('.unitimage').toggleClass('sized');
+        $('.unitimage').hasClass('sized') ? rescaleImage(-120) : rescaleImage(-120);
+        $(this).text($('.unitparams').hasClass('hided')?'- Уменьшить изображение':'+ Увеличить изображение');
+    });
+</script>

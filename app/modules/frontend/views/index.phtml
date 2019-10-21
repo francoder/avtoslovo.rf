@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <?= $this->tag->getTitle() ?>
+        <?php
+        $this->assets
+        ->addCss("assets/css/bootstrap.min.css")
+        ->addCss("assets/css/font-awesome.min.css")
+        ->addCss("assets/css/owl.carousel.min.css")
+        ->addCss("assets/css/chosen.min.css")
+        ->addCss("assets/css/lightbox.min.css")
+        ->addCss("assets/css/style.css?2");
+
+        $this->assets
+        ->collection("header")
+        ->addJs("https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js", true)
+        ->addJs("assets/js/jquery.mask.min.js")
+        ->addJs("assets/js/bootstrap.min.js")
+        ->addJs("assets/js/owl.carousel.min.js")
+        ->addJs("assets/js/chosen.jquery.min.js")
+        ->addJs("assets/js/lightbox.min.js")
+        ->addJs("assets/js/moment-with-locales.min.js");
+
+        $this->assets->outputCss();
+        $this->assets->outputJs('header');
+        ?>
+        <script>
+            (function (d, w, c) {
+                w.ChatraID = 'mbobrtHiYoKqbMLm5';
+                var s = d.createElement('script');
+                w[c] = w[c] || function () {
+                    (w[c].q = w[c].q || []).push(arguments);
+                };
+                s.async = true;
+                s.src = (d.location.protocol === 'https:' ? 'https:' : 'http:')
+                        + '//call.chatra.io/chatra.js';
+                if (d.head)
+                    d.head.appendChild(s);
+            })(document, window, 'Chatra');
+        </script>
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript" >
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function () {
+                    try {
+                        w.yaCounter47133657 = new Ya.Metrika({
+                            id: 47133657,
+                            clickmap: true,
+                            trackLinks: true,
+                            accurateTrackBounce: true,
+                            webvisor: true
+                        });
+                    } catch (e) {
+                    }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                        s = d.createElement("script"),
+                        f = function () {
+                            n.parentNode.insertBefore(s, n);
+                        };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else {
+                    f();
+                }
+            })(document, window, "yandex_metrika_callbacks");
+        </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/47133657" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    <script src="//st.yagla.ru/js/y.c.js?h=ccbf54ed6da558f270b8c79d534aa8e5"></script>
+</head>
+<body>
+    <?if($this->dispatcher->getActionName() === "notFoundAction"):?>
+
+    <div class="fixedheader">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="logo-container">
+                        <a href="/"><h1 class="logo">авто<e>слово.</e>рф</h1><span style="position:  relative;left: -123px;font-weight: 700;top: -9px;">до края земли</span></a>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="search-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab1head">Номер детали</a></li>
+                            <li><a data-toggle="tab" href="#tab3head">VIN номер / номер кузова</a></li>
+                            <li><a data-toggle="tab" href="#tab2head">Марка</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab1head" class="tab-pane fade in active">
+                                <form action="/catalog/parts" method="get" role="form">
+                                    <div class="btn-group">
+                                        <input class="big full dropdown-toggle" data-toggle="dropdown" placeholder="Номер запчасти" type="text" name="query" id="query" value="<?= (isset($query) ? htmlspecialchars($query) : "") ?>" autocomplete="off">
+                                        <?if( count($historyList) ):?>
+                                        <ul class="dropdown-menu">
+                                            <?foreach( $historyList AS $item ):?>
+                                            <li><a href="<?=
+                                                   $this->url->get("catalog/parts", array(
+                                                       "query" => $item->article,
+                                                   ))   ?>" data-article="<?= htmlspecialchars($item->article) ?>"><?= $item->article ?></a></li>
+                                            <?endforeach;?>
+                                        </ul>
+                                        <?endif;?>
+                                    </div>
+                                    <button type="submit">Найти</button>
+                                </form>
+                            </div>
+                            <div id="tab2head" class="tab-pane fade">
+                                <p>Каталог временно недоступен, приносим свои извинения!</p>
+                                <!--<div class="mark-container">
+                                        <ul>
+                                                <li><a href="#">Каталог временно недоступен</a></li>
+                                        </ul>
+                                </div>-->
+                            </div>
+                            <div id="tab3head" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <form class="" action="/catalog" method="get" role="form">
+                                            <input type="hidden" name="action" value="vin">
+                                            <input type="text" name="vin" id="vin" placeholder="VIN номер или номер кузова">
+                                            <button type="submit">Найти</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div style="padding: 15px 0;">
+                        <div role="cart">
+                            <a href="/cart" role="text">Корзина: <?= $cartCount ?></a>
+                        </div>
+                        <div class="clearfix"></div>
+                        <?if( $this->auth->isAuthorized() ):?>
+                        <div class="dropdown hover" style="cursor:default">
+                            <span style="font-size: 14px;color: #4b4b4b;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            Здравствуйте, <?= $this->auth->getCurrent()->firstName ?><br>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
+                            <ul style="margin: 10px -15px;" class="dropdown-menu">
+                                <li><a href="/profile/balance">Баланс: <?= number_format($this->auth->getCurrent()->getBalance(), 2, ",", "&nbsp;") ?>р.</a></li>
+                                <li><a href="/profile/auto">Мои автомобили</a></li>
+                                <li><a href="/profile/orders">Мои заказы</a></li>
+                                <li><a href="/profile/settings">Настройки</a></li>
+                                <!--<li><a href="<?= $this->url->get("profile") ?>">Профиль</a></li>-->
+                                <li class="divider"></li>
+                                <li><a href="<?= $this->url->get("logout") ?>">Выход</a></li>
+                            </ul>
+                        </div>
+                        <?else:?>
+                        <a class="btn-style" href="<?= $this->url->get("login") ?>">Войти</a>  или
+                        <a class="btn-style" href="<?= $this->url->get("register") ?>">Зарегистрироваться</a>
+                        <?endif;?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?endif;?>
+    <div class="container">
+<?= $this->partial("shared/header") ?>
+        <div class="content">
+<?= $this->getContent() ?>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+<?= $this->partial("shared/footer") ?>
+    <?php
+    $this->assets
+    ->collection("footer")
+    ->addJs("assets/js/ui.js")
+    ->addJs("assets/js/core.js");
+    $this->assets->outputJs("footer");
+    ?>
+    <script type="text/javascript" src="https://creat1ve.agency/js/designed.js"></script>
+</body>
+</html>

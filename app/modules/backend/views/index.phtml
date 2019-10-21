@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html class="app" lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<?=$this->tag->getTitle()?> 
+<?
+$this->assets
+	->addCss("assets/css/app.v1.css");
+
+$this->assets
+	->collection("header")
+	->addJs("assets/js/app.v1.js")
+	->addJs("assets/js/app.plugin.js")
+	->addJs("assets/js/jquery.maskedinput.min.js");
+
+$this->assets->outputCss();
+$this->assets->outputJs("header");
+?> 
+<!--[if lt IE 9]>
+<script src="<?=$this->url->get("assets/js/ie/html5shiv.js")?>"></script>
+<script src="<?=$this->url->get("assets/js/ie/respond.min.js")?>"></script>
+<script src="<?=$this->url->get("assets/js/ie/excanvas.js")?>"></script>
+<![endif]-->
+</head>
+<body>
+<section class="vbox">
+	<?=$this->partial("shared/header")?> 
+	<section>
+		<section class="hbox stretch">
+			<?=$this->partial("shared/menu")?> 
+			<section id="content">
+				<section class="hbox stretch">
+					<section>
+						<section class="vbox">
+							<section class="scrollable padder">
+								<?=$this->getContent()?> 
+							</section>
+						</section>
+					</section>
+				</section>
+				<a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen,open" data-target="#nav,html"></a>
+			</section>
+		</section>
+	</section>
+</section>
+<?
+$this->assets
+	->collection("footer")
+	->addJs("assets/js/ui.js")
+	->addJs("assets/js/core.js");
+
+$this->assets->outputJs("footer");
+?>
+</body>
+</html>

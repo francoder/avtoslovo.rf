@@ -1,0 +1,24 @@
+									<li class="<?=($menuItem->current?"active":"")?>">
+										<a href="#" class="auto">
+											<span class="pull-right text-muted">
+												<i class="i i-circle-sm-o text"></i>
+												<i class="i i-circle-sm text-active"></i>
+											</span>
+											<i class="i <?=(isset($menuItem->icon)?$menuItem->icon:"i-dot")?> icon"></i>
+											<span class="font-bold"><?=$menuItem->title?></span>
+										</a>
+										<ul class="nav dk">
+											<?foreach( $menuItem->menu AS $menuItem ):?> 
+											<?if( $menuItem->type == "item" ):?> 
+											<li class="<?=($menuItem->current?"active":"")?>">
+												<a href="<?=$menuItem->link?>" class="auto">
+													<i class="i <?=(isset($menuItem->icon)?$menuItem->icon:"i-dot")?>"></i>
+													<span><?=$menuItem->title?></span>
+												</a>
+											</li>
+											<?elseif( $menuItem->type == "group" ):?> 
+											<?$this->partial("shared/menuGroup")?> 
+											<?endif;?> 
+											<?endforeach;?> 
+										</ul>
+									</li>

@@ -1,0 +1,36 @@
+		<div class="col-sm-6 col-sm-offset-3">
+			<div class="row">
+				<div class="col-sm-12">
+					<h3>Восстановление доступа</h3>
+					<p>Для восстановления доступа введите ваш Email.<br>
+						Мы отправим на него письмо с дальнейшими инструкциями.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="register-container">
+						<form method="post">
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="email">Email</label>
+									<div class="clearfix"></div>
+									<?=$form->render("email", array("class" => "big full", "placeholder" => "Ваш Email"))?>
+									<?foreach( $form->getMessagesFor("email") AS $message ):?> 
+									<div class="clearfix"></div>
+									<label for="email" class="btn-style"><?=$message?></label>
+									<?endforeach;?> 
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<button class="big" type="submit">Продолжить</button>
+									<a href="<?=$this->url->get("login")?>" class="pull-right help-block">Авторизация</a>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>

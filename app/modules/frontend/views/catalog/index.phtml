@@ -1,0 +1,15 @@
+<section class="row m-b-md">
+    <div class="col-sm-12">
+        <h3 class="m-b-xs text-black">Каталог</h3>
+        <?php if( isset($breadCrumbs) AND !empty($breadCrumbs) ):?> 
+        <ul class="breadcrumb">
+            <?php foreach( $breadCrumbs AS $item ):?> 
+            <li>
+                <a data-bjax href="<?= $item["link"] ?>"><?= $item["title"] ?></a>
+            </li>
+            <?php endforeach;?> 
+        </ul>
+        <?php endif;?> 
+    </div>
+</section>
+<?php $this->partial("catalog/pages/".$pageType);?>

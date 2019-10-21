@@ -1,0 +1,17 @@
+		<div class="col-sm-8 col-sm-offset-2">
+			<div class="row">
+				<div class="col-sm-12">
+					<h3>Ошибка 404</h3>
+					<p>Страница на которую вы попали не существует.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<ul class="nav nav-pills">
+						<?foreach( $this->menu->getMenu() AS $menuItem ):?> 
+						<li class="<?=($menuItem->current?"active":"")?>"><a href="<?=$menuItem->link?>"><?=$menuItem->title?></a></li>
+						<?endforeach;?> 
+					</ul>
+				</div>
+			</div>
+		</div>

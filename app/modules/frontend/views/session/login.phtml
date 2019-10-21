@@ -1,0 +1,42 @@
+		<div class="col-sm-4 col-sm-offset-4">
+			<div class="row">
+				<div class="col-sm-12">
+					<h3>Авторизация</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="register-container">
+						<?if( $this->request->isPost() ):?>
+						<div class="btn-style error">Некорректный Email/Пароль</div>
+						<div class="clearfix"></div>
+						<?endif;?>
+						<form method="post">
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="email">Email</label>
+									<?=$form->render("email", array("class" => "big full", "placeholder" => "Ваш Email"))?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<label for="password">Пароль</label>
+									<?=$form->render("password", array("class" => "big full", "placeholder" => "Ваш пароль"))?>
+									<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<button class="big" type="submit">Войти</button>
+									<a href="<?=$this->url->get("forgot")?>" class="pull-right help-block">Забыли пароль?</a>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
